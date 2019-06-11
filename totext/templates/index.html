@@ -9,5 +9,19 @@
     <body>
         <h1>Hello, {{ auth.client_id }}!</h1>
         <h2>Your token is {{ auth.access_token }}!</h1>
+
+      <form action="" method="post" novalidate>
+          {{ form.hidden_tag() }}
+          <p>
+              {{ form.query(size=64) }}
+              {{ form.submit() }}</p>
+      </form>
+
+      {% if results %}
+        <h3>Found {{ results.numFound }} records</h3>
+        {% for doc in results.docs %}
+          <div><p><b>{{ doc.bibcode }}</b><br/>{{ doc.title[0] }}</p></div>
+        {% endfor %}
+      {% endif %}
     </body>
 </html>
