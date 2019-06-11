@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <title>ADS R</title>
+    </head>
+    <body>
+      <center>
+        <h1>ADS-R</h1>
+      </center>
+
+{% block content %}{% endblock %}
+
+      <p>
+        <center>
+          <small>client id: {{ auth.client_id }}!</small> | <small>token: {{ auth.access_token }}!</small>
+        </center>
+      </p>
+    </body>
+</html>
+

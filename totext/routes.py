@@ -1,4 +1,4 @@
-from flask import render_template, session
+from flask import render_template, session, request
 from totext import app
 from totext.forms import QueryForm
 from datetime import datetime
@@ -44,8 +44,8 @@ def abstract(bibcode):
     """
     headers = { "Authorization": "Bearer:{}".format(session['auth']['access_token']), }
     params = urllib.urlencode({
-            'fl': 'title,bibcode,author,keyword,pub,aff,volume,year,[citations],property,pubdate,abstract,esources,data',
-            'q': 'citations(bibcode:{0})'.format(bibcode),
+            'fl': 'title,bibcode,author,keyword,pub,aff,volume,year,[citations],property,pubdate,abstract,esources,data,publisher,comment,doi',
+            'q': 'bibcode:{0}'.format(bibcode),
             'rows': '25',
             'sort': 'date desc',
             'start': '0'
@@ -56,7 +56,7 @@ def abstract(bibcode):
     session['cookies'].update(r.cookies.get_dict())
     return r.json()
 
-def search(q, sort="date desc, bibcode desc"):
+def search(q, rows=25, start=0, sort="date desc, bibcode desc"):
     """
     Execute query
     """
@@ -64,9 +64,9 @@ def search(q, sort="date desc, bibcode desc"):
     params = urllib.urlencode({
                     'fl': 'title,abstract,comment,bibcode,author,keyword,id,citation_count,[citations],pub,aff,volume,pubdate,doi,pub_raw,page,links_data,property,esources,data,email,doctype',
                     'q': '{0}'.format(q),
-                    'rows': '25',
+                    'rows': '{0}'.format(rows),
                     'sort': '{0}'.format(sort),
-                    'start': '0'
+                    'start': '{0}'.format(start)
                 })
     r = requests.get(SEARCH_SERVICE + "?" + params, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT)
     r.raise_for_status()
@@ -74,17 +74,6 @@ def search(q, sort="date desc, bibcode desc"):
     session['cookies'].update(r.cookies.get_dict())
     return r.json()
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    form = QueryForm()
-    if form.validate_on_submit():
-        results = search(form.query.data)
-        results = process_search_results(results)
-        return render_template('index.html', title='Totext home', auth=session['auth'], form=QueryForm(), results=results['response'])
-    return render_template('index.html', title='Totext home', auth=session['auth'], form=QueryForm())
-    #return "Hello, World!"
-
-    
 def process_search_results(results):
     """reformat raw solr response before converting to html"""
     author_limit = 3
@@ -94,3 +83,19 @@ def process_search_results(results):
             d['author'] = d['author'][:author_limit]
             d['author'].append(msg)
     return results
+
+@app.route('/', methods=['GET'])
+def index():
+    form = QueryForm(request.args)
+    if len(form.q.data) > 0:
+        results = search(form.q.data, rows=form.rows.data, start=form.start.data, sort=form.sort.data)
+        results = process_search_results(results)
+        return render_template('index.html', title='Totext home', auth=session['auth'], form=form, results=results['response'])
+    return render_template('index.html', title='Totext home', auth=session['auth'], form=form)
+
+@app.route('/abs/<bibcode>', methods=['GET'])
+def abs(bibcode):
+    if len(bibcode) == 19:
+        results = abstract(bibcode)
+        return render_template('abstract.html', title='Totext Abstract', auth=session['auth'], results=results['response']['docs'][0])
+    return redirect(url_for('index'))

@@ -1,41 +1,35 @@
-,<html>
-  <head>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        {% if title %}
-        <title>{{ title }}</title>
-        {% else %}
-        <title>Totext!</title>
-        {% endif %}
-    </head>
-    <body>
-        <h3>Hello, {{ auth.client_id }}!</h3>
-        <h3>Your token is {{ auth.access_token }}!</h3>
-        <br/><br/>
+{% extends "base.html" %}
+
+{% block content %}
         <div align="center">
-          <form action="" method="post" novalidate>
-            {{ form.hidden_tag() }}
+          <form action="" method="get" novalidate>
+            <div class="form-group">
             <p>
-              {{ form.query(size=64) }}
-              {{ form.submit() }}</p>
-	  </form>
-	</div>
-	{% if results %}
+              {{ form.q(size=64) }}
+              {{ form.sort() }}
+              {{ form.rows(size=4) }}
+              {{ form.start(size=4) }}
+              {{ form.submit(class="btn btn-light") }}</p>
+            </div>
+          </form>
+        </div>
+
+      {% if results %}
         <h3>Found {{ results.numFound }} records</h3>
         {% for doc in results.docs %}
-	<div>
-        <div class="row s-top-row"><p><b><div class="hidden-xs hidden-sm col-md-3 s-top-row-col identifier s-identifier">
-		&nbsp<a href="abs/{{ doc.bibcode }}/abstract" aria-label="bibcode" class="abs-redirect-link">
-		  {{ doc.bibcode }}
-	    </a></div></b>
-	    <div class="col-xs-2 col-md-2 col-md-offset-0 s-top-row-col" aria-label="date published">{{ doc.pubdate }}</div>
-	    <div class="col-xs-3 col-sm-4 col-md-2 s-top-row-col"><a href="abs/{{ doc.bibcode }}/citations" title="citation count" class="citations-redirect-link">cited: {{ doc.citation_count }}</a></div></div>
-	    &nbsp<a href="abs/{{ doc.bibcode }}/abstract" aria-label="bibcode" class="abs-redirect-link">{{ doc.title[0] }}</a></br>
-	    &nbsp{% for auth in doc.author %}
-	    {{ auth }},
-	    {% endfor %}
-	  </p>
-	</div>
+          <div>
+                <div class="row s-top-row"><p><b><div class="hidden-xs hidden-sm col-md-3 s-top-row-col identifier s-identifier">
+                        &nbsp<a href="{{ url_for('abs', bibcode=doc.bibcode) }}" aria-label="bibcode" class="abs-redirect-link">
+              {{ doc.bibcode }}
+              </a></div></b>
+              <div class="col-xs-2 col-md-2 col-md-offset-0 s-top-row-col" aria-label="date published">{{ doc.pubdate }}</div>
+              <div class="col-xs-3 col-sm-4 col-md-2 s-top-row-col"><a href="{{ url_for('abs', bibcode=doc.bibcode) }}/citations" title="citation count" class="citations-redirect-link">cited: {{ doc.citation_count }}</a></div></div>
+              &nbsp<a href="abs/{{ doc.bibcode }}/abstract" aria-label="bibcode" class="abs-redirect-link">{{ doc.title[0] }}</a></br>
+              &nbsp{% for auth in doc.author %}
+              {{ auth }},
+              {% endfor %}
+            </p>
+          </div>
         {% endfor %}
       {% endif %}
-    </body>
-</html>
+{% endblock %}
