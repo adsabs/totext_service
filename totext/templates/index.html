@@ -9,13 +9,19 @@
               {{ form.sort() }}
               {{ form.rows(size=4) }}
               {{ form.start(size=4) }}
-              {{ form.submit(class="btn btn-light") }}</p>
+              {{ form.submit(class="btn btn-light") }}
+              {{ form.no_redirect() }} No redirect</p>
             </div>
           </form>
         </div>
 
       {% if results %}
-        <h3>Found {{ results.numFound }} records</h3>
+      <p>
+      <center>
+        <b>Found {{ results.numFound }} records in {{ g.request_time() }}</b>
+        <br/>
+      </center>
+      </p>
         {% for doc in results.docs %}
           <div>
                 <div class="row s-top-row"><p><b><div class="hidden-xs hidden-sm col-md-3 s-top-row-col identifier s-identifier">
@@ -23,7 +29,7 @@
               {{ doc.bibcode }}
               </a></div></b>
               <div class="col-xs-2 col-md-2 col-md-offset-0 s-top-row-col" aria-label="date published">{{ doc.pubdate }}</div>
-              <div class="col-xs-3 col-sm-4 col-md-2 s-top-row-col"><a href="{{ url_for('abs', bibcode=doc.bibcode) }}/citations" title="citation count" class="citations-redirect-link">cited: {{ doc.citation_count }}</a></div></div>
+              <div class="col-xs-3 col-sm-4 col-md-2 s-top-row-col"><a href="{{ url_for('index', q='citations(bibcode:'+doc.bibcode+')', no_redirect=True) }}" title="citation count" class="citations-redirect-link">cited: {{ doc.citation_count }}</a></div></div>
               &nbsp<a href="abs/{{ doc.bibcode }}/abstract" aria-label="bibcode" class="abs-redirect-link">{{ doc.title[0] }}</a></br>
               &nbsp{% for auth in doc.author %}
               {{ auth }},

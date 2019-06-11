@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, SelectField
+from wtforms import StringField, SubmitField, IntegerField, SelectField, BooleanField
 from wtforms.validators import DataRequired
 
 class QueryForm(FlaskForm):
@@ -16,4 +16,5 @@ class QueryForm(FlaskForm):
                        ])
     rows = IntegerField('rows', default=5)
     start = IntegerField('start', default=0)
+    no_redirect = BooleanField('no_redirect', default=False)
     submit = SubmitField('Search')

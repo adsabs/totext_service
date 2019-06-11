@@ -1,9 +1,10 @@
-from flask import render_template, session, request
+from flask import render_template, session, request, redirect, g
 from totext import app
 from totext.forms import QueryForm
 from datetime import datetime
 import requests
 import urllib
+import time
 
 PRODUCTION_URL = "https://prod.adsabs.harvard.edu/"
 DEVELOPMENT_URL = "https://dev.adsabs.harvard.edu/"
@@ -11,6 +12,7 @@ ADS_URL = DEVELOPMENT_URL
 API_URL = ADS_URL+"v1/"
 BOOTSTRAP_SERVICE = API_URL+"accounts/bootstrap"
 SEARCH_SERVICE = API_URL+"search/query"
+EXPORT_SERVICE = API_URL+"export/bibtex"
 API_TIMEOUT = 30
 
 def is_expired(auth):
@@ -23,6 +25,8 @@ def before_request():
     """
     Store API anonymous cookie in session or if it exists, check if it has expired
     """
+    g.request_start_time = time.time()
+    g.request_time = lambda: "%.5fs" % (time.time() - g.request_start_time)
     if 'cookies' not in session:
         session['cookies'] = {}
     if 'auth' not in session or is_expired(session['auth']):
@@ -47,10 +51,25 @@ def abstract(bibcode):
             'fl': 'title,bibcode,author,keyword,pub,aff,volume,year,[citations],property,pubdate,abstract,esources,data,publisher,comment,doi',
             'q': 'bibcode:{0}'.format(bibcode),
             'rows': '25',
-            'sort': 'date desc',
+            'sort': 'date desc, bibcode desc',
             'start': '0'
             })
     r = requests.get(SEARCH_SERVICE + "?" + params, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT)
+    r.raise_for_status()
+    r.cookies.clear_expired_cookies()
+    session['cookies'].update(r.cookies.get_dict())
+    return r.json()
+
+def export_abstract(bibcode):
+    """
+    Export bibtex
+    """
+    headers = { "Authorization": "Bearer:{}".format(session['auth']['access_token']), }
+    data = {
+            'bibcode': ['{0}'.format(bibcode)],
+            'sort': 'date desc, bibcode desc',
+            }
+    r = requests.post(EXPORT_SERVICE, data=data, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT)
     r.raise_for_status()
     r.cookies.clear_expired_cookies()
     session['cookies'].update(r.cookies.get_dict())
@@ -78,7 +97,7 @@ def process_search_results(results):
     """reformat raw solr response before converting to html"""
     author_limit = 3
     for d in results['response']['docs']:
-        if len(d['author']) > author_limit:
+        if d.get('author') and len(d['author']) > author_limit:
             msg = ' and {} more'.format(len(d['author']) - author_limit)
             d['author'] = d['author'][:author_limit]
             d['author'].append(msg)
@@ -88,14 +107,27 @@ def process_search_results(results):
 def index():
     form = QueryForm(request.args)
     if len(form.q.data) > 0:
+        if not form.no_redirect.data and ('reviews(' in form.q.data or
+            'trending(' in form.q.data or
+            'useful(' in form.q.data or
+            'similar(' in form.q.data):
+           return redirect('https://ui.adsabs.harvard.edu/search/q=' + form.q.data, 302)
         results = search(form.q.data, rows=form.rows.data, start=form.start.data, sort=form.sort.data)
         results = process_search_results(results)
-        return render_template('index.html', title='Totext home', auth=session['auth'], form=form, results=results['response'])
-    return render_template('index.html', title='Totext home', auth=session['auth'], form=form)
+        return render_template('index.html', auth=session['auth'], form=form, results=results['response'])
+    return render_template('index.html', auth=session['auth'], form=form)
 
+@app.route('/abs/<bibcode>/abstract', methods=['GET'])
 @app.route('/abs/<bibcode>', methods=['GET'])
 def abs(bibcode):
     if len(bibcode) == 19:
         results = abstract(bibcode)
-        return render_template('abstract.html', title='Totext Abstract', auth=session['auth'], results=results['response']['docs'][0])
+        return render_template('abstract.html', auth=session['auth'], results=results['response']['docs'][0])
+    return redirect(url_for('index'))
+
+@app.route('/abs/<bibcode>/export', methods=['GET'])
+def export(bibcode):
+    if len(bibcode) == 19:
+        results = export_abstract(bibcode)
+        return render_template('export.html', auth=session['auth'], data=results['export'])
     return redirect(url_for('index'))

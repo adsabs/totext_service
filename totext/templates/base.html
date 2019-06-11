@@ -13,6 +13,8 @@
       <p>
         <center>
           <small>client id: {{ auth.client_id }}!</small> | <small>token: {{ auth.access_token }}!</small>
+          <br/>
+          <small>Rendered in {{ g.request_time() }}</small>
         </center>
       </p>
     </body>
