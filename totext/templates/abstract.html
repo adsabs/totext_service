@@ -1,0 +1,48 @@
+<html>
+  <head>
+        {% if title %}
+        <title>{{ title }}</title>
+        {% else %}
+        <title>no title!</title>
+        {% endif %}
+    </head>
+  <body>
+    <h1>ADS-R</h1>
+    <h2>{{ title }}</h2>
+    <p>
+      {% for elem in author %}
+      elem,
+      {% endfor %}
+    </p>
+    <p>
+      {{ abstract }}
+    </p>
+    <p>
+      Publication:
+      {{ publisher }}
+    </p>
+    <p>
+      Pub Date:
+      {{ pubdate }}
+    </p>
+    <p>
+      DOI:
+      {{ doi }}
+    </p>
+    <p>
+      Bibcode:
+      {{ bibcode }}
+    </p>
+    <p>
+      Keywords:
+      {% for elem in keyword %}
+      elem;
+      {% endfor %}
+    </p>
+    <p>
+      E-Print Comments:
+      {{ comments }}
+    </p>
+      
+  </body>
+</html>
