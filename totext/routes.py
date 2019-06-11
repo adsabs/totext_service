@@ -79,6 +79,18 @@ def index():
     form = QueryForm()
     if form.validate_on_submit():
         results = search(form.query.data)
+        results = process_search_results(results)
         return render_template('index.html', title='Totext home', auth=session['auth'], form=QueryForm(), results=results['response'])
     return render_template('index.html', title='Totext home', auth=session['auth'], form=QueryForm())
     #return "Hello, World!"
+
+    
+def process_search_results(results):
+    """reformat raw solr response before converting to html"""
+    author_limit = 3
+    for d in results['response']['docs']:
+        if len(d['author']) > author_limit:
+            msg = ' and {} more'.format(len(d['author']) - author_limit)
+            d['author'] = d['author'][:author_limit]
+            d['author'].append(msg)
+    return results
