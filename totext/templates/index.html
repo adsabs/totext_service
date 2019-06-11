@@ -1,5 +1,6 @@
 <html>
-    <head>
+  <head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         {% if title %}
         <title>{{ title }}</title>
         {% else %}
@@ -7,17 +8,18 @@
         {% endif %}
     </head>
     <body>
-        <h1>Hello, {{ auth.client_id }}!</h1>
-        <h2>Your token is {{ auth.access_token }}!</h1>
-
-      <form action="" method="post" novalidate>
-          {{ form.hidden_tag() }}
-          <p>
+        <h3>Hello, {{ auth.client_id }}!</h3>
+        <h3>Your token is {{ auth.access_token }}!</h3>
+        <br/><br/>
+        <div align="center">
+          <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
               {{ form.query(size=64) }}
               {{ form.submit() }}</p>
-      </form>
-
-      {% if results %}
+	  </form>
+	</div>
+	{% if results %}
         <h3>Found {{ results.numFound }} records</h3>
         {% for doc in results.docs %}
           <div><p><b>{{ doc.bibcode }}</b><br/>{{ doc.title[0] }}</p></div>
