@@ -25,14 +25,14 @@
             <br>
             <strong>Publication date:</strong> {{ doc.pubdate }}
             <br>
-            <strong>Bibcode:</strong> {{ doc.bibcode }}
-            <br>
+            <strong>Bibcode:</strong> {{ doc.bibcode }}<br/>
             <a href="{{ url_for('index', q='citations(bibcode:'+doc.bibcode+')') }}">Citations ({{ doc.citation_count }})</a>
             |
             <a href="{{ url_for('index', q='references(bibcode:'+doc.bibcode+')') }}">References</a>
             |
-            <a href="https://ui.adsabs.harvard.edu/link_gateway/{{ doc.bibcode }}/ESOURCE">Sources</a>
-            |
+	    {% for esource in doc.esources %}
+	    <a href="{{ esource.url }}">{{ esource.link_type}}</a> |
+	    {% endfor %}
             <a href="{{ url_for('export', bibcode=doc.bibcode) }}">BibTeX</a>
         </p>
     </div>

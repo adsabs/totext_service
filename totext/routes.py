@@ -14,6 +14,7 @@ SERVER_BASE_URL = os.environ.get('SERVER_BASE_URL', "/")
 BOOTSTRAP_SERVICE = os.environ.get('BOOTSTRAP_SERVICE', API_URL+"accounts/bootstrap")
 SEARCH_SERVICE = os.environ.get('SEARCH_SERVICE', API_URL+"search/query")
 EXPORT_SERVICE = os.environ.get('EXPORT_SERVICE', API_URL+"export/bibtex")
+ESOURCE_SERVICE = os.environ.get('SEARCH_SERVICE', API_URL+"resolver/{}/esource")
 API_TIMEOUT = 30
 
 def is_expired(auth):
@@ -59,7 +60,21 @@ def abstract(bibcode):
     r.raise_for_status()
     r.cookies.clear_expired_cookies()
     session['cookies'].update(r.cookies.get_dict())
-    return r.json()
+    d = r.json()    
+    esources_response = current_app.client.get(ESOURCE_SERVICE.format(bibcode), headers=headers, timeout=API_TIMEOUT, verify=False)
+    if esources_response.status_code == 200:
+        try:
+            esources_json = esources_response.json()
+            print esources_json
+            if esources_json['action'] == 'display':
+                esources = esources_json['links']['records']  # an array of dicts
+            elif esources_json['action'] == 'redirect':
+                esources_json['url'] = esources_json['link']  
+                esources = [esources_json]
+            d['response']['docs'][0]['esources'] = esources
+        except Exception as e:
+            print "exception while slamming esource links info into solr response", str(e)
+    return d
 
 def export_abstract(bibcode):
     """
