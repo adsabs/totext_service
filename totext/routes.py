@@ -50,7 +50,7 @@ def abstract(bibcode):
     """
     headers = { "Authorization": "Bearer:{}".format(session['auth']['access_token']), }
     params = urllib.urlencode({
-            'fl': 'title,bibcode,author,keyword,pub,aff,volume,year,[citations],property,pubdate,abstract,esources,data,publisher,comment,doi,citation_count,reference_count',
+            'fl': 'title,bibcode,author,pub,pubdate,abstract,citation_count',
             'q': 'bibcode:{0}'.format(bibcode),
             'rows': '25',
             'sort': 'date desc, bibcode desc',
@@ -86,7 +86,7 @@ def search(q, rows=25, start=0, sort="date desc"):
         # Add secondary sort criteria
         sort += ", bibcode desc"
     params = urllib.urlencode({
-                    'fl': 'title,abstract,comment,bibcode,author,keyword,id,citation_count,[citations],pub,aff,volume,pubdate,doi,pub_raw,page,links_data,property,esources,data,email,doctype',
+                    'fl': 'title,bibcode,author,citation_count,pubdate',
                     'q': '{0}'.format(q),
                     'rows': '{0}'.format(rows),
                     'sort': '{0}'.format(sort),
