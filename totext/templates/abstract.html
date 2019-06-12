@@ -9,7 +9,7 @@
         <p>
             <strong>
               {% for title in doc.title %}
-              {{ title }};
+              {{ title|safe }};
               {% endfor %}
             </strong>
             <br>
@@ -18,7 +18,7 @@
               {% endfor %}
             <br>
             <br>
-            {{ doc.abstract }}
+            {{ doc.abstract|safe }}
             <br>
             <br>
             <strong>Publication:</strong> {{ doc.pub }}
