@@ -10,12 +10,12 @@
         <strong>{{ results.numFound }}</strong> records found ( {{ g.request_time() }} )
         <br/>
         {% if form.start.data - form.rows.data >= 0 %}
-        <a href="/?q={{ form.q.data }}&sort={{ form.sort.data }}&start={{ form.start.data - form.rows.data }}" title="next" class="is-size-6">previous</a> |
+        <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&start={{ form.start.data - form.rows.data }}" title="next" class="is-size-6">previous</a> |
         {% endif %}
         {{ (form.start.data / form.rows.data) | int  }} of
         {{ (results.numFound / form.rows.data) | round(0, 'ceil')| int }} pages
         {% if results.numFound - (form.start.data + form.rows.data) > 0 %}
-        | <a href="/?q={{ form.q.data }}&sort={{ form.sort.data }}&start={{ form.start.data + form.rows.data }}" title="next" class="is-size-6">next</a>
+        | <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&start={{ form.start.data + form.rows.data }}" title="next" class="is-size-6">next</a>
         {% endif %}
     </div>
   </div>
@@ -29,9 +29,9 @@
               <strong>Sort By</strong>
               <span class="is-pulled-right">
                 {% if " desc" in form.sort.data %}
-                    <a href="/?q={{ form.q.data }}&sort={{ form.sort.data | replace(" desc", " asc")  }}" title="set sort direction">asc</a>
+                    <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data | replace(" desc", " asc")  }}" title="set sort direction">asc</a>
                 {% else %}
-                    <a href="/?q={{ form.q.data }}&sort={{ form.sort.data | replace(" asc", " desc")  }}" title="set sort direction">desc</a>
+                    <a href="{{ base_url}}?q={{ form.q.data }}&sort={{ form.sort.data | replace(" asc", " desc")  }}" title="set sort direction">desc</a>
                 {% endif %}
               </span>
             </p>
@@ -42,9 +42,9 @@
                     <p class="has-text-weight-medium is-size-6">{{ opt.text }}</p>
                 {% else %}
                   {% if " desc" in form.sort.data %}
-                    <a href="/?q={{ form.q.data }}&sort={{ opt.id }} desc" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
+                      <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ opt.id }} desc" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
                   {% else %}
-                    <a href="/?q={{ form.q.data }}&sort={{ opt.id }} asc" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
+                      <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ opt.id }} asc" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
                   {% endif %}
                 {% endif %}
               </div>

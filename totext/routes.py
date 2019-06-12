@@ -11,6 +11,7 @@ PRODUCTION_URL = "https://prod.adsabs.harvard.edu/"
 DEVELOPMENT_URL = "https://dev.adsabs.harvard.edu/"
 ADS_URL = DEVELOPMENT_URL
 API_URL = ADS_URL+"v1/"
+SERVER_BASE_URL = os.environ.get('SERVER_BASE_URL', "/")
 BOOTSTRAP_SERVICE = os.environ.get('BOOTSTRAP_SERVICE', API_URL+"accounts/bootstrap")
 SEARCH_SERVICE = os.environ.get('SEARCH_SERVICE', API_URL+"search/query")
 EXPORT_SERVICE = os.environ.get('EXPORT_SERVICE', API_URL+"export/bibtex")
@@ -107,7 +108,7 @@ def limit_authors(results):
             d['author'].append(msg)
     return results
 
-@app.route('/', methods=['GET'])
+@app.route(SERVER_BASE_URL, methods=['GET'])
 def index():
     form = QueryForm(request.args)
     if len(form.q.data) > 0:
@@ -125,21 +126,21 @@ def index():
             { 'id': 'read_count', 'text': 'Reads', 'description': 'sort by number of reads' },
             { 'id': 'score', 'text': 'Score', 'description': 'sort by the relative score' }
         ]
-        return render_template('index.html', auth=session['auth'], form=form, results=results['response'], sort_options=sort_options)
-    return render_template('index.html', auth=session['auth'], form=form)
+        return render_template('index.html', base_url=SERVER_BASE_URL, auth=session['auth'], form=form, results=results['response'], sort_options=sort_options)
+    return render_template('index.html', base_url=SERVER_BASE_URL, auth=session['auth'], form=form)
 
-@app.route('/abs/<bibcode>/abstract', methods=['GET'])
-@app.route('/abs/<bibcode>', methods=['GET'])
+@app.route(SERVER_BASE_URL+'abs/<bibcode>/abstract', methods=['GET'])
+@app.route(SERVER_BASE_URL+'abs/<bibcode>', methods=['GET'])
 def abs(bibcode):
     if len(bibcode) == 19:
         results = abstract(bibcode)
         results = limit_authors(results)
-        return render_template('abstract.html', auth=session['auth'], doc=results['response']['docs'][0])
+        return render_template('abstract.html', base_url=SERVER_BASE_URL, auth=session['auth'], doc=results['response']['docs'][0])
     return redirect(url_for('index'))
 
-@app.route('/abs/<bibcode>/export', methods=['GET'])
+@app.route(SERVER_BASE_URL+'abs/<bibcode>/export', methods=['GET'])
 def export(bibcode):
     if len(bibcode) == 19:
         results = export_abstract(bibcode)
-        return render_template('export.html', auth=session['auth'], data=results['export'])
+        return render_template('export.html', base_url=SERVER_BASE_URL, auth=session['auth'], data=results['export'])
     return redirect(url_for('index'))
