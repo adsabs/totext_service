@@ -14,7 +14,7 @@ SERVER_BASE_URL = os.environ.get('SERVER_BASE_URL', "/")
 BOOTSTRAP_SERVICE = os.environ.get('BOOTSTRAP_SERVICE', API_URL+"accounts/bootstrap")
 SEARCH_SERVICE = os.environ.get('SEARCH_SERVICE', API_URL+"search/query")
 EXPORT_SERVICE = os.environ.get('EXPORT_SERVICE', API_URL+"export/bibtex")
-ESOURCE_SERVICE = os.environ.get('SEARCH_SERVICE', API_URL+"resolver/{}/esource")
+ESOURCE_SERVICE = os.environ.get('ESOURCE_SERVICE', API_URL+"resolver/{}/esource")
 API_TIMEOUT = 30
 
 def is_expired(auth):
