@@ -28,7 +28,7 @@ def before_request():
     Store API anonymous cookie in session or if it exists, check if it has expired
     """
     g.request_start_time = time.time()
-    g.request_time = lambda: "{:.1}s".format((time.time() - g.request_start_time))
+    g.request_time = lambda: "{:.1f}s".format((time.time() - g.request_start_time))
     if 'cookies' not in session:
         session['cookies'] = {}
     if 'auth' not in session or is_expired(session['auth']):

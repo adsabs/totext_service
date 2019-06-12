@@ -13,6 +13,6 @@ class QueryForm(FlaskForm):
                            ('citation_count asc', 'Citations (asc)'),
                            ('score asc', 'Score (asc)'),
                        ])
-    rows = IntegerField('rows', default=5)
+    rows = IntegerField('rows', default=25)
     start = IntegerField('start', default=0)
     submit = SubmitField('Search')
