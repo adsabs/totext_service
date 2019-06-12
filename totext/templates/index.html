@@ -12,7 +12,7 @@
         {% if form.start.data - form.rows.data >= 0 %}
         <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&rows={{ form.rows.data }}&start={{ form.start.data - form.rows.data }}" title="next" class="is-size-6">previous</a> |
         {% endif %}
-        {{ (form.start.data / form.rows.data) | int  }} of
+        {{ ((form.start.data / form.rows.data) + 1) | int  }} of
         {{ (results.numFound / form.rows.data) | round(0, 'ceil')| int }} pages
         {% if results.numFound - (form.start.data + form.rows.data) > 0 %}
         | <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&rows={{ form.rows.data }}&start={{ form.start.data + form.rows.data }}" title="next" class="is-size-6">next</a>

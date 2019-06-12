@@ -1,8 +1,7 @@
-from flask import render_template, session, request, redirect, g
+from flask import render_template, session, request, redirect, g, current_app
 from totext import app
 from totext.forms import QueryForm
 from datetime import datetime
-import requests
 import urllib
 import time
 import os
@@ -38,7 +37,7 @@ def before_request():
         #   'client_name': 'BB client', 'token_type': 'Bearer', 'ratelimit': 1.0, 'anonymous': True,
         #   'client_secret': '2yvOxfgZtBaiNzAGt2YYYhMKyhTxIFxS62rFtcxNdjEDqWu0w33vQhp41RaQ',
         #   'expire_in': '2019-06-12T14:15:17.823482', 'refresh_token': 'itRUeo3vshekgyMYNMDxoGb84C6NTYoqjQ156xO9'}
-        r = requests.get(BOOTSTRAP_SERVICE, cookies=session['cookies'], timeout=API_TIMEOUT)
+        r = current_app.client.get(BOOTSTRAP_SERVICE, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
         r.raise_for_status()
         r.cookies.clear_expired_cookies()
         session['cookies'].update(r.cookies.get_dict())
@@ -56,7 +55,7 @@ def abstract(bibcode):
             'sort': 'date desc, bibcode desc',
             'start': '0'
             })
-    r = requests.get(SEARCH_SERVICE + "?" + params, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT)
+    r = current_app.client.get(SEARCH_SERVICE + "?" + params, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
     r.raise_for_status()
     r.cookies.clear_expired_cookies()
     session['cookies'].update(r.cookies.get_dict())
@@ -71,7 +70,7 @@ def export_abstract(bibcode):
             'bibcode': ['{0}'.format(bibcode)],
             'sort': 'date desc, bibcode desc',
             }
-    r = requests.post(EXPORT_SERVICE, data=data, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT)
+    r = current_app.client.post(EXPORT_SERVICE, data=data, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
     r.raise_for_status()
     r.cookies.clear_expired_cookies()
     session['cookies'].update(r.cookies.get_dict())
@@ -92,7 +91,7 @@ def search(q, rows=25, start=0, sort="date desc"):
                     'sort': '{0}'.format(sort),
                     'start': '{0}'.format(start)
                 })
-    r = requests.get(SEARCH_SERVICE + "?" + params, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT)
+    r = current_app.client.get(SEARCH_SERVICE + "?" + params, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
     r.raise_for_status()
     r.cookies.clear_expired_cookies()
     session['cookies'].update(r.cookies.get_dict())
