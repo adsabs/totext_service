@@ -1,15 +1,31 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <title>ADS R</title>
-    </head>
-    <body>
-      <center>
-        <h1>ADS-R</h1>
-      </center>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ADS R</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4/css/tachyons.min.css">
+  </head>
+  <body>
+
+<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="/">
+      <img src="https://ui.adsabs.harvard.edu/styles/img/transparent_logo.svg" width="50" height="28"> ADS
+    </a>
+  </div>
+
+  <div class="navbar-menu">
+  {% if request.endpoint == "index" %}
+    <form class="navbar-item is-expanded" method="GET" action="/" novalidate>
+        {{ form.q(size=64, autofocus=true, placeholder="search for something...") }}
+        {{ form.sort(hidden=true) }}
+    </form>
+    {% endif %}
+  </div>
+</nav>
 
 {% block content %}{% endblock %}
-
       <p>
         <center>
           <small>client id: {{ auth.client_id }}!</small> | <small>token: {{ auth.access_token }}!</small>
@@ -17,6 +33,6 @@
           <small>Rendered in {{ g.request_time() }}</small>
         </center>
       </p>
-    </body>
+  </body>
 </html>
 

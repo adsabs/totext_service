@@ -1,41 +1,92 @@
 {% extends "base.html" %}
 
 {% block content %}
-        <div align="center">
-          <form action="" method="get" novalidate>
-            <div class="form-group">
-            <p>
-              {{ form.q(size=64) }}
-              {{ form.sort() }}
-              {{ form.rows(size=4) }}
-              {{ form.start(size=4) }}
-              {{ form.submit(class="btn btn-light") }}
-              {{ form.no_redirect() }} No redirect</p>
-            </div>
-          </form>
-        </div>
 
       {% if results %}
-      <p>
-      <center>
-        <b>Found {{ results.numFound }} records in {{ g.request_time() }}</b>
+
+<section class="section pt3">
+  <div class="flex">
+    <div class="is-5 flex-item">
+        <strong>{{ results.numFound }}</strong> records found ( {{ g.request_time() }} )
         <br/>
-      </center>
-      </p>
-        {% for doc in results.docs %}
-          <div>
-                <div class="row s-top-row"><p><b><div class="hidden-xs hidden-sm col-md-3 s-top-row-col identifier s-identifier">
-                        &nbsp<a href="{{ url_for('abs', bibcode=doc.bibcode) }}" aria-label="bibcode" class="abs-redirect-link">
-              {{ doc.bibcode }}
-              </a></div></b>
-              <div class="col-xs-2 col-md-2 col-md-offset-0 s-top-row-col" aria-label="date published">{{ doc.pubdate }}</div>
-              <div class="col-xs-3 col-sm-4 col-md-2 s-top-row-col"><a href="{{ url_for('index', q='citations(bibcode:'+doc.bibcode+')', no_redirect=True) }}" title="citation count" class="citations-redirect-link">cited: {{ doc.citation_count }}</a></div></div>
-              &nbsp<a href="abs/{{ doc.bibcode }}/abstract" aria-label="bibcode" class="abs-redirect-link">{{ doc.title[0] }}</a></br>
-              &nbsp{% for auth in doc.author %}
-              {{ auth }},
-              {% endfor %}
+        {% if form.start.data - form.rows.data >= 0 %}
+        <a href="/?q={{ form.q.data }}&sort={{ form.sort.data }}&start={{ form.start.data - form.rows.data }}" title="next" class="is-size-6">previous</a> |
+        {% endif %}
+        {{ (form.start.data / form.rows.data) | int  }} of
+        {{ (results.numFound / form.rows.data) | round(0, 'ceil')| int }} pages
+        {% if results.numFound - (form.start.data + form.rows.data) > 0 %}
+        | <a href="/?q={{ form.q.data }}&sort={{ form.sort.data }}&start={{ form.start.data + form.rows.data }}" title="next" class="is-size-6">next</a>
+        {% endif %}
+    </div>
+  </div>
+  <hr class="hr">
+  <div class="flex">
+    <div class="flex-item w-20">
+      <div class="tile is-ancestor">
+        <div class="tile is-11 is-vertical is-parent">
+          <div class="tile is-child box pv2">
+            <p class="is-5">
+              <strong>Sort By</strong>
+              <span class="is-pulled-right">
+                {% if " desc" in form.sort.data %}
+                    <a href="/?q={{ form.q.data }}&sort={{ form.sort.data | replace(" desc", " asc")  }}" title="set sort direction">asc</a>
+                {% else %}
+                    <a href="/?q={{ form.q.data }}&sort={{ form.sort.data | replace(" asc", " desc")  }}" title="set sort direction">desc</a>
+                {% endif %}
+              </span>
             </p>
+            <div class="flex flex-column">
+              {% for opt in sort_options %}
+              <div class="flex-item">
+                {% if opt.id in form.sort.data %}
+                    <p class="has-text-weight-medium is-size-6">{{ opt.text }}</p>
+                {% else %}
+                  {% if " desc" in form.sort.data %}
+                    <a href="/?q={{ form.q.data }}&sort={{ opt.id }} desc" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
+                  {% else %}
+                    <a href="/?q={{ form.q.data }}&sort={{ opt.id }} asc" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
+                  {% endif %}
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
           </div>
-        {% endfor %}
+          <!-- <div class="tile is-child box">
+            start
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <div class="flex-item w-80">
+      {% for doc in results.docs %}
+        <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" class="box pt1">
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <div class="flex">
+                  <div class="w-25">
+                      {{ doc.bibcode }}
+                  </div>
+                  <div class="w-25">
+                      {{ doc.pubdate }}
+                  </div>
+                  <div class="w-25">
+                      cited: {{ doc.citation_count }}
+                  </div>
+                </div>
+                <strong>{{ doc.title[0] }}</strong>
+                <br>
+                {% for auth in doc.author %}
+                {{ auth }};
+                {% endfor %}
+              </p>
+            </div>
+          </div>
+        </a>
+    {% endfor %}
+    </div>
+  </div>
+</section>
       {% endif %}
 {% endblock %}
+

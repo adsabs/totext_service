@@ -1,51 +1,45 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if request.referrer and request.url_root in request.referrer %}
-    <a href="{{ request.referrer }}" class="btn btn-light">Go to search</a>
-    {% else %}
-    <a href="{{ url_for('index') }}" class="btn btn-light">Go to search</a>
-    {% endif %}
 
-    <h2>{{ results.title[0] }}</h2>
-    <p>
-      {% for elem in results.author %}
-      {{ elem }},
-      {% endfor %}
-    </p>
-    <p>
-      {{ results.abstract }}
-    </p>
-    <p>
-      Publication:
-      {{ results.publisher }}
-    </p>
-    <p>
-      Pub Date:
-      {{ results.pubdate }}
-    </p>
-    <p>
-      DOI:
-      {{ results.doi }}
-    </p>
-    <p>
-      Bibcode:
-      {{ results.bibcode }}
-    </p>
-    <p>
-      Keywords:
-      {% for elem in results.keyword %}
-      {{ elem }};
-      {% endfor %}
-    </p>
-    <p>
-      E-Print Comments:
-      {{ results.comments }}
-    </p>
-    <p>
-    Publisher: <a href="https://ui.adsabs.harvard.edu/link_gateway/{{ results.bibcode }}/ESOURCE">Full text</a>
-    </p>
-    <p>
-    <a href="{{ url_for('export', bibcode=results.bibcode) }}" class="btn btn-dark">Export Bibtex</a>
-    </p>
+<section class="section">
+  <hr class="hr">
+  <div class="container">
+    <div>
+        <p>
+            <strong>
+              {% for title in doc.title %}
+              {{ title }};
+              {% endfor %}
+            </strong>
+            <br>
+              {% for author in doc.author %}
+              {{ author }};
+              {% endfor %}
+            <br>
+            <br>
+            {{ doc.abstract }}
+            <br>
+            <br>
+            <strong>Publication:</strong> {{ doc.pub }}
+            <br>
+            <strong>Publication date:</strong> {{ doc.pubdate }}
+            <br>
+            <strong>Bibcode:</strong> {{ doc.bibcode }}
+            <br>
+            <a href="{{ url_for('index', q='citations(bibcode:'+doc.bibcode+')') }}">Citations ({{ doc.citation_count }})</a>
+            |
+            <a href="{{ url_for('index', q='references(bibcode:'+doc.bibcode+')') }}">References</a>
+            |
+            <a href="https://ui.adsabs.harvard.edu/link_gateway/{{ doc.bibcode }}/ESOURCE">Sources</a>
+            |
+            <a href="{{ url_for('export', bibcode=doc.bibcode) }}">BibTeX</a>
+        </p>
+    </div>
+  </div>
+</section>
+
+
+
+
 {% endblock %}
