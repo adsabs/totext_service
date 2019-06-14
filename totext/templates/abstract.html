@@ -14,7 +14,7 @@
             </strong>
             <br>
               {% for author in doc.author %}
-              <a href="{{ url_for('index', q='author:' + author) }}">{{ author }}</a>;
+              <a href="{{ url_for('index', q='author:\"' + author + '\"') }}">{{ author }}</a>;
               {% endfor %}
             <br>
             <br>

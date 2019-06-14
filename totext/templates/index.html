@@ -2,91 +2,42 @@
 
 {% block content %}
 
-      {% if results %}
+    <div class="col-xs-3 col-sm-3 col-md-1 left-nav sidebar-offcanvas">
+    </div>
 
-<section class="section pt3">
-  <div class="flex">
-    <div class="is-5 flex-item">
-        <strong>{{ results.numFound }}</strong> records found ( {{ g.request_time() }} )
-        <br/>
-        {% if form.start.data - form.rows.data >= 0 %}
-        <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&rows={{ form.rows.data }}&start={{ form.start.data - form.rows.data }}" title="next" class="is-size-6">previous</a> |
-        {% endif %}
-        {{ ((form.start.data / form.rows.data) + 1) | int  }} of
-        {{ (results.numFound / form.rows.data) | round(0, 'ceil')| int }} pages
-        {% if results.numFound - (form.start.data + form.rows.data) > 0 %}
-        | <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&rows={{ form.rows.data }}&start={{ form.start.data + form.rows.data }}" title="next" class="is-size-6">next</a>
-        {% endif %}
-    </div>
-  </div>
-  <hr class="hr">
-  <div class="flex">
-    <div class="flex-item w-20">
-      <div class="tile is-ancestor">
-        <div class="tile is-11 is-vertical is-parent">
-          <div class="tile is-child box pv2">
-            <p class="is-5">
-              <strong>Sort By</strong>
-              <span class="is-pulled-right">
-                {% if " desc" in form.sort.data %}
-                    <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data | replace(" desc", " asc")  }}&rows={{ form.rows.data }}" title="set sort direction">asc</a>
-                {% else %}
-                    <a href="{{ base_url}}?q={{ form.q.data }}&sort={{ form.sort.data | replace(" asc", " desc")  }}&rows={{ form.rows.data }}" title="set sort direction">desc</a>
-                {% endif %}
-              </span>
-            </p>
-            <div class="flex flex-column">
-              {% for opt in sort_options %}
-              <div class="flex-item">
-                {% if opt.id in form.sort.data %}
-                    <p class="has-text-weight-medium is-size-6">{{ opt.text }}</p>
-                {% else %}
-                  {% if " desc" in form.sort.data %}
-                      <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ opt.id }} desc&rows={{ form.rows.data }}" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
-                  {% else %}
-                      <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ opt.id }} asc&rows={{ form.rows.data }}" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
-                  {% endif %}
-                {% endif %}
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-          <!-- <div class="tile is-child box">
-            start
-          </div> -->
-        </div>
-      </div>
-    </div>
-    <div class="flex-item w-80">
-      {% for doc in results.docs %}
-        <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" class="box pt1">
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <div class="flex">
-                  <div class="w-25">
-                      {{ doc.bibcode }}
-                  </div>
-                  <div class="w-25">
-                      {{ doc.pubdate }}
-                  </div>
-                  <div class="w-25">
-                      cited: {{ doc.citation_count }}
-                  </div>
+    <div class="post main-content col-xs-12 col-md-9">
+
+      <header class="post-header">
+      </header>
+
+      <article class="post-content">
+
+        <div class="row">
+          <div class="col-sm-12 search-bar-input-row s-search-bar-input-row">
+            <form name="main-query" action="{{ base_url }}">
+              <div class="form-group has-feedback">
+                <div class="input-group">
+                  
+                  <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                  {{ form.q(size=64, autofocus=true, class="form-control q ui-autocomplete-input", autocomplete="off") }}
+                  <i class="icon-clear s-clear-control"></i> 
+                  <span class="input-group-btn">
+                             <button type="submit" class="btn btn-primary search-submit s-search-submit" aria-label="submit">
+                                 <i class="fa fa-search"></i></button>
+                        </span>
+
                 </div>
-                <strong>{{ doc.title[0]|safe }}</strong>
-                <br>
-                {% for auth in doc.author %}
-                {{ auth }};
-                {% endfor %}
-              </p>
-            </div>
+                <!-- /input-group -->
+              </div>
+              <!-- /form-group-->
+            </form>
           </div>
-        </a>
-    {% endfor %}
+        </div>
+
+      </article>
+
     </div>
-  </div>
-</section>
-      {% endif %}
+
+
 {% endblock %}
 

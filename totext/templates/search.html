@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="col-xs-3 col-sm-3 col-md-1 left-nav sidebar-offcanvas">
+    </div>
+
+    <div class="post main-content col-xs-12 col-md-9">
+
+      <header class="post-header">
+      </header>
+
+      <article class="post-content">
+
+        <div class="row">
+          <div class="col-sm-12 search-bar-input-row s-search-bar-input-row">
+            <form name="main-query" action="{{ base_url }}">
+              <div class="form-group has-feedback">
+                <div class="input-group">
+                  
+                  <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                  {{ form.q(size=64, autofocus=true, class="form-control q ui-autocomplete-input", autocomplete="off") }}
+                  
+                  <i class="icon-clear s-clear-control"></i> 
+                  <span class="input-group-btn">
+                             <button type="submit" class="btn btn-primary search-submit s-search-submit" aria-label="submit">
+                                 <i class="fa fa-search"></i></button>
+                        </span>
+
+                </div>
+                <!-- /input-group -->
+              </div>
+              <!-- /form-group-->
+            </form>
+          </div>
+        </div>
+
+<section >
+    <div class="row">
+    <div class="col-md-5 col-md-offset-4">
+        <p><strong>{{ results.numFound }}</strong> records found ( {{ qtime }} | {{ g.request_time() }} )</p>
+    </div>
+    </div>
+
+    <div>
+        <div data-widget="Results">
+            <div class="list-of-things">
+                <div class="s-results-widget results-widget">
+                    <div class="row">
+                        <ul class="col-sm-12 results-list  s-results-list list-unstyled s-display-block" aria-label="list of results">
+
+      {% for doc in results.docs %}
+
+      <li>
+      <div class="col-sm-12 ">
+        <div class="row s-top-row">
+            <div class="hidden-xs hidden-sm col-md-4 s-top-row-col identifier s-identifier">
+                <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" aria-label="bibcode" class="abs-redirect-link" style="color: #5D5D5D;">
+                     {{ doc.bibcode }}
+                </a>
+            </div>
+            <div class="col-xs-2 col-md-2 col-md-offset-0 s-top-row-col" aria-label="date published" style="color: #5D5D5D;">
+                 {{ doc.pubdate[:-3] }}
+            </div>
+            <div class="col-xs-3 col-sm-4 col-md-2 s-top-row-col">
+                {% if doc.citation_count > 0 %}
+                <a href="{{ url_for('index', q='citations(bibcode:'+doc.bibcode+')') }}" title="citation count" class="citations-redirect-link">cited: {{ doc.citation_count }}</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row s-top-row">
+            <div class="col-xs-10 ">
+                    <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" class="abs-redirect-link">
+                        <strong>{{ doc.title[0]|safe }}</strong>
+                    </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-10">
+                {% for auth in doc.author %}
+                    <ul class="list-inline just-authors s-results-authors less-authors" style="display: inline-block;" aria-label="authors">
+                        <li class="article-author">{{ auth }};</li>
+                    </ul>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <br/>
+
+        </div>
+</li>
+
+
+
+    {% endfor %}
+    </ul>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    </div>
+
+    <div class="is-5 flex-item">
+        <p><center>
+        {% if form.start.data - form.rows.data >= 0 %}
+        <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&rows={{ form.rows.data }}&start={{ form.start.data - form.rows.data }}" title="next" class="is-size-6">previous</a> |
+        {% endif %}
+        {{ ((form.start.data / form.rows.data) + 1) | int  }} of
+        {{ (results.numFound / form.rows.data) | round(0, 'ceil')| int }} pages
+        {% if results.numFound - (form.start.data + form.rows.data) > 0 %}
+        | <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&rows={{ form.rows.data }}&start={{ form.start.data + form.rows.data }}" title="next" class="is-size-6">next</a>
+        {% endif %}
+        </center></p>
+    </div>
+  </div>
+
+
+    <div class="col-xs-3 col-sm-3 col-md-1 left-nav sidebar-offcanvas">
+            <p>
+              <strong>Sort By</strong>
+              <span class="is-pulled-right">
+                {% if " desc" in form.sort.data %}
+                    <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data | replace(" desc", " asc")  }}&rows={{ form.rows.data }}" title="set sort direction">asc</a>
+                {% else %}
+                    <a href="{{ base_url}}?q={{ form.q.data }}&sort={{ form.sort.data | replace(" asc", " desc")  }}&rows={{ form.rows.data }}" title="set sort direction">desc</a>
+                {% endif %}
+              </span>
+            </p>
+            <p>
+              {% for opt in sort_options %}
+              <div>
+                {% if opt.id in form.sort.data %}
+                    <div>{{ opt.text }}</div>
+                {% else %}
+                  {% if " desc" in form.sort.data %}
+                      <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ opt.id }} desc&rows={{ form.rows.data }}" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
+                  {% else %}
+                      <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ opt.id }} asc&rows={{ form.rows.data }}" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
+                  {% endif %}
+                {% endif %}
+              </div>
+              {% endfor %}
+            </p>
+
+    </div>
+
+
+
+
+</section>
+
+      </article>
+
+    </div>
+
+{% endblock %}
+

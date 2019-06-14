@@ -20,7 +20,7 @@ API_TIMEOUT = 30
 def is_expired(auth):
     expire_in = datetime.strptime(auth['expire_in'], "%Y-%m-%dT%H:%M:%S.%f")
     delta = expire_in - datetime.now()
-    return delta.seconds < 0
+    return delta.total_seconds() < 0
 
 @app.before_request
 def before_request():
@@ -28,7 +28,7 @@ def before_request():
     Store API anonymous cookie in session or if it exists, check if it has expired
     """
     g.request_start_time = time.time()
-    g.request_time = lambda: "{:.1f}s".format((time.time() - g.request_start_time))
+    g.request_time = lambda: "{:.3f}s".format((time.time() - g.request_start_time))
     if 'cookies' not in session:
         session['cookies'] = {}
     if 'auth' not in session or is_expired(session['auth']):
@@ -60,7 +60,7 @@ def abstract(bibcode):
     r.raise_for_status()
     r.cookies.clear_expired_cookies()
     session['cookies'].update(r.cookies.get_dict())
-    d = r.json()    
+    d = r.json()
     esources_response = current_app.client.get(ESOURCE_SERVICE.format(bibcode), headers=headers, timeout=API_TIMEOUT, verify=False)
     if esources_response.status_code == 200:
         try:
@@ -69,7 +69,7 @@ def abstract(bibcode):
             if esources_json['action'] == 'display':
                 esources = esources_json['links']['records']  # an array of dicts
             elif esources_json['action'] == 'redirect':
-                esources_json['url'] = esources_json['link']  
+                esources_json['url'] = esources_json['link']
                 esources = [esources_json]
             d['response']['docs'][0]['esources'] = esources
         except Exception as e:
@@ -128,6 +128,7 @@ def index():
     if len(form.q.data) > 0:
         results = search(form.q.data, rows=form.rows.data, start=form.start.data, sort=form.sort.data)
         results = limit_authors(results)
+        qtime = "{:.3f}s".format(float(results['responseHeader']['QTime']) / 1000)
         sort_options = [
             { 'id': 'author_count', 'text': 'Authors', 'description': 'sort by number of authors' },
             { 'id': 'bibcode', 'text': 'Bibcode', 'description': 'sort by bibcode' },
@@ -140,7 +141,7 @@ def index():
             { 'id': 'read_count', 'text': 'Reads', 'description': 'sort by number of reads' },
             { 'id': 'score', 'text': 'Score', 'description': 'sort by the relative score' }
         ]
-        return render_template('index.html', base_url=SERVER_BASE_URL, auth=session['auth'], form=form, results=results['response'], sort_options=sort_options)
+        return render_template('search.html', base_url=SERVER_BASE_URL, auth=session['auth'], form=form, results=results['response'], qtime=qtime, sort_options=sort_options)
     return render_template('index.html', base_url=SERVER_BASE_URL, auth=session['auth'], form=form)
 
 @app.route(SERVER_BASE_URL+'abs/<bibcode>/abstract', methods=['GET'])

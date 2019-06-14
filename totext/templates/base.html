@@ -1,37 +1,161 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">-->
+    <!--<link rel="stylesheet" href="https://unpkg.com/tachyons@4/css/tachyons.min.css">-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="q68EGUOrG2HGZ62jIdD4ILfyPYZtDK6amNJbkrav_DA" />
+
     <title>ADS R</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/tachyons@4/css/tachyons.min.css">
+    <meta name="description" content="Slow connections ADS">
+
+    <link rel="stylesheet" href="//ui.adsabs.harvard.edu/about/css/main.css">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="//ui.adsabs.harvard.edu/about/img/bbb_favicon.ico">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="canonical" href="https://dev.adsabs.harvard.edu/totext/">
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   </head>
   <body>
 
-<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="{{ base_url }}">
-      <img src="https://ui.adsabs.harvard.edu/styles/img/transparent_logo.svg" width="50" height="28"> ADS
-    </a>
-  </div>
+    
+<nav class="navbar fluid navbar-inverse">
+        <div class="navbar-header">
+          <a class="navbar-brand s-navbar-brand" href="{{ base_url }}"><img class="s-ads-icon" src="//ui.adsabs.harvard.edu/about/img/transparent_logo.svg" alt="ads icon"/>
+                <h1> <b>ads</b></h1>
+            </a>
 
-  <div class="navbar-menu">
-  {% if request.endpoint == "index" %}
-    <form class="navbar-item is-expanded" method="GET" action="{{ base_url }}" novalidate>
-        {{ form.q(size=64, autofocus=true, placeholder="search for something...") }}
-        {{ form.sort(hidden=true) }}
-    </form>
-    {% endif %}
-  </div>
+        </div>   
 </nav>
 
-{% block content %}{% endblock %}
-      <p>
-        <center>
-          <small>client id: {{ auth.client_id }}!</small> | <small>token: {{ auth.access_token }}!</small>
-          <br/>
-          <small>Rendered in {{ g.request_time() }}</small>
-        </center>
+<div class="s-starry-background-wrapper">
+    <section class="s-logo-header">
+        <div>
+                <img src="//ui.adsabs.harvard.edu/about/img/transparent_logo.svg" alt="The Astrophysics Data System Logo"/>
+                <b>astrophysics</b>&nbsp;data system
+        </div>
+     </section>
+
+</div>
+
+
+
+
+    <div class="page-content smart-container">
+      <div class="row row-offcanvas row-offcanvas-left">
+          {% block content %}{% endblock %}
+      </div>
+    </div>
+
+
+    <footer>
+
+  <div class="__footer_wrapper">
+    <div class="__footer_brand">
+      &copy; The SAO/NASA Astrophysics Data System
+      <div class="__footer_brand_extra">
+        <p>
+          <i class="fa fa-envelope"></i> adshelp[at]cfa.harvard.edu
+        </p>
+        <p>
+          The ADS is operated by the Smithsonian Astrophysical Observatory under NASA Cooperative Agreement <em>NNX16AC86A</em>
+        </p>
+      </div>
+      <div class="__footer_brand_logos">
+          <a href="http://www.nasa.gov" target="_blank" rel="noopener">
+            <img src="//ui.adsabs.harvard.edu/about/img/nasa.svg" alt="NASA logo" id="nasa-logo">
+          </a>
+          <a href="http://www.si.edu" target="_blank" rel="noopener">
+            <img id="smithsonian-logo" src="//ui.adsabs.harvard.edu/about/img/smithsonian.svg" alt="Smithsonian logo">
+          </a>
+          <a href="https://www.cfa.harvard.edu/" target="_blank" rel="noopener">
+            <img src="//ui.adsabs.harvard.edu/about/img/cfa.png" title="Harvard Center for Astrophysics logo" id="cfa-logo">
+          </a>
+      </div>
+    </div>
+    <div class="__footer_list">
+      <div class="__footer_list_title">
+        Resources
+      </div>
+      <ul class="__footer_links">
+        <li>
+          <a href="https://adsabs.github.io/help/" target="_blank" rel="noopener">
+            <i class="fa fa-info-circle"></i> ADS Help
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="__footer_list">
+      <div class="__footer_list_title">
+        Social
+      </div>
+      <ul class="__footer_links">
+        <li>
+          <a href="https://twitter.com/adsabs" target="_blank" rel="noopener">
+            <i class="fa fa-twitter"></i> @adsabs
+          </a>
+        </li>
+        <li>
+          <a href="https://adsabs.github.io/blog/" target="_blank" rel="noopener">
+            <i class="fa fa-newspaper-o"></i> ADS Blog
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="__footer_list">
+      <div class="__footer_list_title">
+        Project
+      </div>
+      <ul class="__footer_links">
+        <li>
+          <a href="https://adsisdownorjustme.herokuapp.com/" target="_blank" rel="noopener">Is ADS down? (or is it just me...)</a>
+        </li>
+        <li>
+          <a href="http://www.si.edu" target="_blank" rel="noopener">Smithsonian Institution</a>
+        </li>
+        <li>
+          <a href="http://www.si.edu/Privacy" target="_blank" rel="noopener">Smithsonian Privacy Notice</a>
+        </li>
+        <li>
+          <a href="http://www.si.edu/Termsofuse" target="_blank" rel="noopener">Smithsonian Terms of Use</a>
+        </li>
+        <li>
+          <a href="http://www.cfa.harvard.edu/sao" target="_blank" rel="noopener">Smithsonian Astrophysical Observatory</a>
+        </li>
+        <li>
+          <a href="http://www.nasa.gov" target="_blank" rel="noopener">NASA</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<!--<nav class="navbar is-dark" role="navigation" aria-label="main navigation">-->
+  <!--<div class="navbar-brand">-->
+    <!--<a class="navbar-item" href="{{ base_url }}">-->
+      <!--<img src="https://ui.adsabs.harvard.edu/styles/img/transparent_logo.svg" width="50" height="28"> ADS-->
+    <!--</a>-->
+  <!--</div>-->
+
+  <!--<div class="navbar-menu">-->
+  <!--{% if request.endpoint == "index" %}-->
+    <!--<form class="navbar-item is-expanded" method="GET" action="{{ base_url }}" novalidate>-->
+        <!--{{ form.q(size=64, autofocus=true, placeholder="search for something...") }}-->
+        <!--{{ form.sort(hidden=true) }}-->
+    <!--</form>-->
+    <!--{% endif %}-->
+  <!--</div>-->
+<!--</nav>-->
+
+      <!--<p>-->
+        <!--<center>-->
+          <!--<small>client id: {{ auth.client_id }}!</small> | <small>token: {{ auth.access_token }}!</small>-->
+          <!--<br/>-->
+          <!--<small>Rendered in {{ g.request_time() }}</small>-->
+        <!--</center>-->
       </p>
   </body>
 </html>
