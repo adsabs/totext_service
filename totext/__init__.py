@@ -28,5 +28,7 @@ class MiniADSFlask(Flask):
 app = MiniADSFlask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'any random string')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'you-will-never-guess')
+app.config['SESSION_COOKIE_NAME'] = "adslite"
+app.config['SESSION_COOKIE_PATH'] = os.environ.get('SERVER_BASE_URL', "/")
 
 from totext import routes
