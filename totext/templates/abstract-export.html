@@ -12,18 +12,12 @@
 
     {% if doc %}
     <a href="{{ url_for('abs', identifier=doc.bibcode) }}" data-widget-id="ShowAbstract">
-    <div class="abstract-nav s-nav  s-nav-selected  ">
+    <div class="abstract-nav s-nav">
             <span class="s-content">
             Abstract
             </span>
     </div>
     </a>
-    {% else %}
-    <div class="abstract-nav s-nav  s-nav-selected  s-nav-inactive">
-            <span class="s-content">
-            Abstract
-            </span>
-    </div>
     {% endif %}
 
 
@@ -87,12 +81,18 @@
 
     {% if doc %}
     <a href="{{ url_for('export', identifier=doc.bibcode) }}" data-widget-id="ShowExportcitation__default">
-      <div class="abstract-nav s-nav  ">
+      <div class="abstract-nav s-nav s-nav-selected">
         <span class="content">
           Export Citation
         </span>
       </div>
     </a>
+    {% else %}
+      <div class="abstract-nav s-nav s-nav-selected s-nav-inactive">
+        <span class="content">
+          Export Citation
+        </span>
+      </div>
     {% endif %}
 
 </nav>
@@ -105,62 +105,26 @@
 
                     <div id="abstract-title-container" class="s-abstract-title-container"></div>
                     <div id="current-subview">
-                        <div data-widget="ShowAbstract">
-                          <article class="s-abstract-metadata"><!--<div id="article-navigation">|</div>-->
+                        <div data-widget="ShowAbstract"></div>
+                        <div data-widget="ShowCitations"></div>
+                        <div data-widget="ShowReferences"></div>
+                        <div data-widget="ShowCoreads"></div>
+                        <div data-widget="ShowSimilar"></div>
+                        <div data-widget="ShowTableofcontents"></div>
+                        <div data-widget="ShowGraphics"></div>
+                        <div data-widget="ShowExportcitation" data-origin="abstract">
 {% if doc %}
-
-
-<h2 class="s-abstract-title">
-    {% for title in doc.title %}
-    {{ title|safe }}{% if not loop.last %};{% endif %}
-    {% endfor %}
-    <a href=""></a>
-</h2>
-
-
-<div id="authors-and-aff" class="s-authors-and-aff">
-    <ul class="list-inline">
-            {% if doc.author %}
-              {% for author in doc.author[:50] %}
-              <li class="author"><a href="{{ url_for('index', q='author:\"' + author + '\"') }}">{{ author }}</a></li>{% if not loop.last %};{% endif %}
-              {% endfor %}
-          {% endif %}
-                {% if doc.author|length > 50 %}
-                  <li>
-                    <em>and {{ doc.author|length - 50 }} more</em>
-                  </li>
-                {% endif %}
-    </ul>
-</div>
-
-<div class="s-abstract-text">
-    <h4 class="sr-only">Abstract</h4>
-    <p>
-        {{ doc.abstract|safe }}
-    </p>
-</div>
-
-<br>
-<dl class="s-abstract-dl-horizontal">
-
-    <dt>Publication:</dt>
-    <dd>
-    <div id="article-publication">{{ doc.pub }}</div>
-    </dd>
-
-    <dt>Pub Date:</dt>
-    <dd>{{ doc.pubdate[:-3] }}</dd>
-
-
-    <dt>Bibcode:</dt>
-    <dd>
-          {{ doc.bibcode }}
-    </dd>
-
-
-
-
-</dl>
+<div><div data-reactroot="" class="container-fluid export-container"><span>
+            <div class="h4">Exporting BibTeX record</div>
+        </span>
+        <div>
+                        
+                        <div class="col-sm-12"><div><div class="row"><div class="form-group">
+                            <textarea class="export-textarea form-control" readonly="">{{ data }}</textarea>
+                        </div></div>
+                            </div></div>
+        </div>
+    </div></div>
 {% else %}
   <div class="row text-center">
     <span class="fa-stack fa-lg text-danger">
@@ -178,16 +142,7 @@
   </div>
 
 {% endif %}
-
-</article>
                         </div>
-                        <div data-widget="ShowCitations"></div>
-                        <div data-widget="ShowReferences"></div>
-                        <div data-widget="ShowCoreads"></div>
-                        <div data-widget="ShowSimilar"></div>
-                        <div data-widget="ShowTableofcontents"></div>
-                        <div data-widget="ShowGraphics"></div>
-                        <div data-widget="ShowExportcitation" data-origin="abstract"></div>
                         <div data-widget="ShowMetrics" data-allow-redirect="false"></div>
                         <div data-widget="MetaTagsWidget"><div></div></div>
                     </div>
