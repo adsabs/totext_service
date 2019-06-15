@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <div data-widget="ClassicSearchForm"><div class="classic-form"><form action="{{ base_url }}classic-form">
+    <div class="pull-right">
+        <button style="position: relative;top: -13px; transition: none;" class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
+    </div>
+
+    <div data-field="database">
+        Collections to query : <label> <input type="checkbox" checked="true" name="astronomy"> Astronomy </label>&nbsp;&nbsp; <label> <input type="checkbox" name="physics"> Physics </label>
+    </div>
+    <div class="clearfix">
+        <div class="col-sm-6" data-field="author" data-textinput="true">
+            <div class="classic-form__logic-group logic-group">
+                <label> <input type="radio" name="author_logic" value="AND" checked="true"> and </label>
+                <label> <input type="radio" name="author_logic" value="OR"> or </label>
+                <label> <input type="radio" name="author_logic" value="BOOLEAN"> boolean </label>
+            </div>
+            <div>
+                <label class="classic-author-label" for="#classic-author">Author</label>
+                <textarea id="classic-author" name="author_names" cols="30" rows="2" placeholder="(Last, First M) one per line"></textarea>
+            </div>
+        </div>
+        <div class="col-sm-6" data-field="object" data-textinput="true">
+           <div class="pull-right-sm">
+            <div class="classic-form__logic-group logic-group">
+                <label> <input type="radio" name="object_logic" value="AND" checked="true"> and </label>
+                <label> <input type="radio" name="object_logic" value="OR"> or </label>
+                <label> <input type="radio" name="object_logic" value="BOOLEAN"> boolean </label>
+            </div>
+            <div>
+                <label class="classic-object-label" for="#classic-object">Object</label>
+                <textarea id="classic-object" name="object_names" cols="30" rows="2" placeholder="SIMBAD object search"></textarea>
+            </div>
+           </div>
+       </div>
+    </div>
+    <div data-field="date">
+        <div>
+         <b>Publication date</b> between <br>
+            <input class="form-control  date-control" maxlength="2" placeholder="MM" type="text" value="" name="month_from" style="margin-top:6px">/
+            <input class="form-control  date-control" maxlength="4" placeholder="YYYY" type="text" value="" name="year_from">and
+            <input class="form-control  date-control" maxlength="2" placeholder="MM" type="text" value="" name="month_to">/
+            <input class="form-control  date-control" maxlength="4" placeholder="YYYY" type="text" value="" name="year_to">
+        </div>
+    </div>
+    <div data-field="title" data-textinput="true">
+        <div class="classic-form__logic-group logic-group pull-right">
+            <label> <input type="radio" name="title_logic" value="AND" checked="true"> and </label>
+            <label> <input type="radio" name="title_logic" value="OR"> or </label>
+            <label> <input type="radio" name="title_logic" value="BOOLEAN"> boolean </label>
+        </div>
+        <div>
+            <label for="#classic_title_input"> Title</label>
+            <input id="classic_title_input" class="form-control" name="title" type="text">
+        </div>
+    </div>
+    <div data-field="abs" data-textinput="true">
+        <div class="classic-form__logic-group logic-group pull-right">
+            <label> <input type="radio" name="abstract_logic" value="AND" checked="true"> and </label>
+            <label> <input type="radio" name="abstract_logic" value="OR"> or </label>
+            <label> <input type="radio" name="abstract_logic" value="BOOLEAN"> boolean </label>
+        </div>
+        <div>
+        <label for="#classic_abstract_input"> Abstract/Keywords</label>
+        <input id="clasic_abstract_input" class="form-control" name="abstract" type="text">
+        </div>
+    </div>
+    <div data-field="property">
+        <label>
+            <input type="checkbox" name="refereed">&nbsp;Refereed only&nbsp;
+        </label>
+        &nbsp;&nbsp;&nbsp;
+        <label>
+            <input type="checkbox" name="article">&nbsp;Articles only&nbsp;
+        </label>
+    </div>
+    <div data-field="bibstem" data-textinput="true">
+        <div class="logic-group">
+            <input type="checkbox" class="hidden" value="OR" checked="true">
+        </div>
+        <label for="#classic-bibstem">Publication(s)</label>
+        <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input id="classic-bibstem" type="text" class="form-control" name="bibstem" placeholder="Comma-separated bibstems of journal titles">
+    </div>
+
+    <!--<div class="pull-right">
+        <button class="btn btn-primary" type="submit" style="transition: none;"><i class="fa fa-search"></i> Search</button>
+    </div>-->
+
+</form>
+</div></div>
+
+{% endblock %}
+

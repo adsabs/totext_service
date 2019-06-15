@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div data-widget="PaperSearchForm"><div class="paper-search-form"><div class="row">
+      <form class="paper-form s-paper-form col-md-6 clearfix" action="{{ base_url }}paper-form">
+    <div class="form-group">
+      <label for="pub-input">Publication </label>
+      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+      <input type="text" name="bibstem" class="form-control" id="pub-input" data-term="bibstem" placeholder="e.g ApJ">
+    </div>
+    <div class="form-group">
+      <label for="year-input">Year</label>
+      <input type="text" name="year" class="form-control" id="year-input" data-term="year">
+    </div>
+    <div class="form-group">
+      <label for="volume-input">Volume</label>
+      <input type="text" name="volume" class="form-control" id="volume-input" data-term="volume">
+    </div>
+    <div class="form-group">
+      <label for="page-input">Page</label>
+      <input type="text" name="page" class="form-control" id="page-input" data-term="page">
+    </div>
+    <div class="form-group">
+      <div class="button-div pull-right">
+        <button class="btn btn-primary author-submit" style="transition: none;" type="submit"><i class="fa fa-search"></i> Search</button>
+      </div>
+    </div>
+  </form>
+
+  <form class="bibcode-form col-md-6 clearfix" action="{{ base_url }}paper-form" method="post">
+    <div class="form-group">
+      <label for="#bibcode-textarea">List of Bibcodes</label>
+      <div class="s-light-font">
+        Enter Bibcodes (e.g. 1989ApJ...342L..71R), one per line.
+      </div>
+      <textarea class="form-control" name="bibcodes" id="bibcode-textarea" cols="30" rows="12"></textarea>
+    </div>
+    <div class="form-group">
+      <div class="button-div pull-right" style="padding-top: 7px;">
+        <button class="btn btn-primary author-submit" style="transition: none;" type="submit"><i class="fa fa-search"></i> Search</button>
+      </div>
+    </div>
+  </form>
+</div>
+</div></div>
+
+{% endblock %}
+
+

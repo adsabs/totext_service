@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div data-widget="SearchWidget"><div class="s-search-bar-widget">
+    <div role="search">
+      <div class="row"></div>
+
+  <div class="row">
+    <div class="col-sm-12 search-bar-input-row s-search-bar-input-row">
+
+            <form name="main-query" action="{{ base_url }}">
+              <div class="form-group has-feedback">
+                <div class="input-group">
+                  
+                  <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                  {{ form.q(size=64, autofocus=true, class="form-control q ui-autocomplete-input", autocomplete="off") }}
+                  <span class="input-group-btn">
+                             <button type="submit" class="btn btn-primary search-submit s-search-submit" style="transition: none;" aria-label="submit">
+                                 <i class="fa fa-search"></i></button>
+                        </span>
+
+                </div>
+                <!-- /input-group -->
+              </div>
+              <!-- /form-group-->
+            </form>
+
+
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="only-show-on-landing">
+    <div class="quick-reference">
+      <div class="col-sm-6">
+        <dl class="dl-horizontal">
+          <dt>author</dt>
+          <dd>author:"huchra, john"</dd>
+          <dt>first author</dt>
+          <dd>author:"^huchra, john"</dd>
+          <dt>abstract + title</dt>
+          <dd>abs:"dark energy"</dd>
+          <dt>year</dt>
+          <dd>year:2000</dd>
+          <dt>year range</dt>
+          <dd>year:2000-2005</dd>
+          <dt>full text</dt>
+          <dd>full:"gravitational waves"</dd>
+          <dt>publication</dt>
+          <dd>bibstem:ApJ <i class="icon-help" data-toggle="tooltip" title="" data-original-title="this field requires the bibstem, or journal abbreviation--try going to the 'Paper' tab above for an easy-to-use form version"></i></dd>
+        </dl>
+      </div>
+      <div class="col-sm-6  quick-reference">
+        <dl class="dl-horizontal">
+          <dt>citations</dt>
+          <dd>citations(author:"huchra, j") <i class="icon-help" data-toggle="tooltip" title="" data-original-title="finds all papers that cite a given set of papers"></i></dd>
+          <dt>references</dt>
+          <dd>references(author:"huchra, j") <i class="icon-help" data-toggle="tooltip" title="" data-original-title="finds all papers referenced by a given set of papers"></i></dd>
+          <dt>reviews</dt>
+          <dd>reviews("gamma-ray bursts") <i class="icon-help" data-toggle="tooltip" title="" data-original-title="finds articles citing the most relevant papers on the topic being researched"></i></dd>
+          <hr>
+          <dt>refereed</dt>
+          <dd>property:refereed <i class="icon-help" data-toggle="tooltip" title="" data-original-title="limit to non-refereed papers by searching property:notrefereed"></i></dd>
+          <dt>astronomy</dt>
+          <dd>database:astronomy <i class="icon-help" data-toggle="tooltip" title="" data-original-title="limit to physics papers by searching database:physics"></i></dd>
+          <dt>OR</dt>
+          <dd>abs:(planet OR star) <i class="icon-help" data-toggle="tooltip" title="" data-original-title="default logic is AND, e.g. abs:(planet star) would be interpreted as abs:(planet AND star)"></i></dd>
+        </dl>
+      </div>
+    </div>
+
+  </div>
+
+    <div class="s-num-found">
+      <span class="s-light-font description">Your search returned</span>
+        <b><span class="num-found-container">0</span></b>
+        <span class="s-light-font"> results </span>
+    </div>
+</div>
+
+
+    </div></div>
+  <br>
+</div>
+
+{% endblock %}
+

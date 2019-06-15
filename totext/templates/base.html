@@ -1,61 +1,188 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">-->
-    <!--<link rel="stylesheet" href="https://unpkg.com/tachyons@4/css/tachyons.min.css">-->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width initial-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="google-site-verification" content="q68EGUOrG2HGZ62jIdD4ILfyPYZtDK6amNJbkrav_DA" />
+<html lang="en">
+<head profile="http://a9.com/-/spec/opensearch/1.1/">
+<meta charset="utf-8">
+<base href="{{ base_url }}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="google-site-verification" content="XxQuw38lagr8-TgtCyhAMP_6ELS9dy35fgrqo9dxw3o">
+<title>
+NASA/ADS</title>
+<meta name="description" content="A powerful, streamlined new Astrophysics Data System">
+<link rel="preload" href="//ui.adsabs.harvard.edu/styles/css/styles.css" as="style">
+<link rel="stylesheet" href="//ui.adsabs.harvard.edu/styles/css/styles.css">
+<link rel="icon" type="image/png" sizes="32x32" href="//ui.adsabs.harvard.edu/styles/img/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="https://ui.adsabs.harvard.edu/opensearch.xml" title="ADS Search">
+<noscript>
+<style>
+#app-container {
+        display: none;
+      }
+      body {
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #noscriptmsg {
+        max-width: 450px;
+        padding: 10px;
+      }</style></noscript></head><body style="">
 
-    <title>ADS R</title>
-    <meta name="description" content="Slow connections ADS">
 
-    <link rel="stylesheet" href="//ui.adsabs.harvard.edu/about/css/main.css">
+<div id="aria-announcement-container">
+    Now on
+    home page
 
-    <link rel="icon" type="image/png" sizes="32x32" href="//ui.adsabs.harvard.edu/about/img/bbb_favicon.ico">
-    <meta name="theme-color" content="#ffffff">
-    <link rel="canonical" href="https://dev.adsabs.harvard.edu/totext/">
-
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  </head>
-  <body>
-
-    
-<nav class="navbar fluid navbar-inverse">
+</div>
+<div id="app-container"><div id="body-template-container"><div class="s-master-page-manager"><div id="navbar-container">
+  <div data-widget="NavbarWidget"><div><nav class="navbar fluid navbar-inverse">
+        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <a class="navbar-brand s-navbar-brand" href="{{ base_url }}"><img class="s-ads-icon" src="//ui.adsabs.harvard.edu/about/img/transparent_logo.svg" alt="ads icon"/>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand s-navbar-brand" href="#"><img class="s-ads-icon" src="//ui.adsabs.harvard.edu/styles/img/transparent_logo.svg" alt="ads icon">
                 <h1> <b>ads</b></h1>
             </a>
+        </div>
 
-        </div>   
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+            <ul class="nav navbar-nav navbar-right">
+
+                <li>
+                    <button type="button" class="btn btn-primary-faded feedback-button" style="transition: none;" data-toggle="modal" data-target="#feedback-modal">
+                      <i class="fa fa-comment about-page-icon"></i> 
+                      {% if request.endpoint == "classic_form" %}
+                          <a href="https://ui.adsabs.harvard.edu/classic-form" style="color: #FFFFFF">Full ADS</a>
+                      {% elif request.endpoint == "paper_form" %}
+                          <a href="https://ui.adsabs.harvard.edu/modern-form" style="color: #FFFFFF">Full ADS</a>
+                      {% else %}
+                          <a href="https://ui.adsabs.harvard.edu/" style="color: #FFFFFF">Full ADS</a>
+                      {% endif %}
+                    </button>
+                </li>
+
+            </ul>
+
+        </div>
+        <!-- /.navbar-collapse -->
+    
 </nav>
+<!-- /.container-fluid -->
+</div></div>
+</div>
 
-<div class="s-starry-background-wrapper">
+<div id="content-container">
+  <div class="dynamic-container s-dynamic-container"><div><div id="landing-page-layout" class="s-landing-page-layout">
+   <div class="s-starry-background-wrapper" style="background-color: #120c2e; transition: none;">
     <section class="s-logo-header">
         <div>
-                <img src="//ui.adsabs.harvard.edu/about/img/transparent_logo.svg" alt="The Astrophysics Data System Logo"/>
+                <img src="//ui.adsabs.harvard.edu/styles/img/transparent_logo.svg" alt="The Astrophysics Data System Logo">
                 <b>astrophysics</b>&nbsp;data system
         </div>
      </section>
+       <div class="nav-container s-landing-nav-container">
+       <div>
+        <nav class="s-landing-tabs">
+            {% if request.endpoint == "classic_form" %}
+            <li class="landing-tab active">
+            {% else %}
+            <li class="landing-tab ">
+            {% endif %}
+                <a href="{{ url_for('classic_form') }}" data-widget-id="ClassicSearchForm" style="height: auto">
+                    Classic
+                    <span class="hidden-xs">
+                        Form
+                    </span>
+                </a>
+            </li>
+            {% if request.endpoint == "index" %}
+            <li class="landing-tab active">
+            {% else %}
+            <li class="landing-tab ">
+            {% endif %}
+                <a href="{{ url_for('index') }}" data-widget-id="SearchWidget" style="height: auto">
+                    Modern
+                    <span class="hidden-xs">
+                        Form
+                    </span>
+                </a>
+            </li>
+            {% if request.endpoint == "paper_form" %}
+            <li class="landing-tab active">
+            {% else %}
+            <li class="landing-tab ">
+            {% endif %}
+                <a href="{{ url_for('paper_form') }}" data-widget-id="PaperSearchForm" style="height: auto">
+                    Paper
+                    <span class="hidden-xs">
+                        Form
+                    </span>
+                </a>
+            </li>
+
+</nav></div></div>
+   </div>
+
+    <section class="s-search-bar-row  row">
+
+                <div class="search-bar-rows-container s-search-bar-rows-container">
+                    <br>
+                    <br>
+
+          {% block content %}{% endblock %}
+
+
+  {% if request.endpoint == "index" and not results %}
+                <div class="landing-faq row">
+                  <a href="{{ base_url }}classic-form">
+                  <div class="col-sm-4">
+                      <i class="fa fa-life-ring fa-2x"></i>
+                    <div>
+                      Use a classic ADS-style form
+                    </div>
+                  </div>
+                  </a>
+                  <a href="https://adsabs.github.io/help/search/search-syntax" target="_blank" rel="noopener">
+                    <div class="col-sm-4">
+
+                      <i class="fa fa-search fa-2x"></i>
+                    <div>
+                       Learn more about searching the ADS
+                    </div>
+                  </div>
+                  </a>
+                  <a href="https://github.com/adsabs/adsabs-dev-api" target="_blank" rel="noopener">
+                  <div class="col-sm-4">
+
+                      <i class="fa fa-code fa-2x"></i>
+                    <div>
+                      Access ADS data with our API
+                    </div>
+                  </div>
+                  </a>
+                </div>
+  {% endif %}
+
+    </section>
 
 </div>
+</div></div>
+</div>
 
-
-
-
-    <div class="page-content smart-container">
-      <div class="row row-offcanvas row-offcanvas-left">
-          {% block content %}{% endblock %}
-      </div>
-    </div>
-
-
-    <footer>
-
+<div id="footer-container">
+  <div data-widget="FooterWidget"><div class="footer s-footer"><footer>
   <div class="__footer_wrapper">
     <div class="__footer_brand">
-      &copy; The SAO/NASA Astrophysics Data System
+      © The SAO/NASA Astrophysics Data System
       <div class="__footer_brand_extra">
         <p>
           <i class="fa fa-envelope"></i> adshelp[at]cfa.harvard.edu
@@ -65,15 +192,15 @@
         </p>
       </div>
       <div class="__footer_brand_logos">
-          <a href="http://www.nasa.gov" target="_blank" rel="noopener">
-            <img src="//ui.adsabs.harvard.edu/about/img/nasa.svg" alt="NASA logo" id="nasa-logo">
-          </a>
-          <a href="http://www.si.edu" target="_blank" rel="noopener">
-            <img id="smithsonian-logo" src="//ui.adsabs.harvard.edu/about/img/smithsonian.svg" alt="Smithsonian logo">
-          </a>
-          <a href="https://www.cfa.harvard.edu/" target="_blank" rel="noopener">
-            <img src="//ui.adsabs.harvard.edu/about/img/cfa.png" title="Harvard Center for Astrophysics logo" id="cfa-logo">
-          </a>
+        <a href="http://www.nasa.gov" target="_blank" rel="noopener">
+          <img src="//ui.adsabs.harvard.edu/styles/img/nasa.svg" alt="NASA logo" id="nasa-logo">
+        </a>
+        <a href="http://www.si.edu" target="_blank" rel="noopener">
+          <img id="smithsonian-logo" src="//ui.adsabs.harvard.edu/styles/img/smithsonian.svg" alt="Smithsonian logo">
+        </a>
+        <a href="https://www.cfa.harvard.edu/" target="_blank" rel="noopener">
+          <img src="//ui.adsabs.harvard.edu/styles/img/cfa.png" title="Harvard Center for Astrophysics logo" id="cfa-logo">
+        </a>
       </div>
     </div>
     <div class="__footer_list">
@@ -82,8 +209,18 @@
       </div>
       <ul class="__footer_links">
         <li>
-          <a href="https://adsabs.github.io/help/" target="_blank" rel="noopener">
+          <a href="//ui.adsabs.harvard.edu/about/" target="_blank" rel="noopener">
+            <i class="fa fa-question-circle"></i> About ADS
+          </a>
+        </li>
+        <li>
+          <a href="//adsabs.github.io/help/" target="_blank" rel="noopener">
             <i class="fa fa-info-circle"></i> ADS Help
+          </a>
+        </li>
+        <li>
+          <a href="//ui.adsabs.harvard.edu/about/careers/" target="_blank" rel="noopener">
+            <i class="fa fa-group"></i> Careers@ADS
           </a>
         </li>
       </ul>
@@ -94,12 +231,12 @@
       </div>
       <ul class="__footer_links">
         <li>
-          <a href="https://twitter.com/adsabs" target="_blank" rel="noopener">
+          <a href="//twitter.com/adsabs" target="_blank" rel="noopener">
             <i class="fa fa-twitter"></i> @adsabs
           </a>
         </li>
         <li>
-          <a href="https://adsabs.github.io/blog/" target="_blank" rel="noopener">
+          <a href="//adsabs.github.io/blog/" target="_blank" rel="noopener">
             <i class="fa fa-newspaper-o"></i> ADS Blog
           </a>
         </li>
@@ -132,31 +269,11 @@
     </div>
   </div>
 </footer>
+</div></div>
+</div>
+</div></div></div>
+</div><!-- /.modal -->
+</body></html>
 
-<!--<nav class="navbar is-dark" role="navigation" aria-label="main navigation">-->
-  <!--<div class="navbar-brand">-->
-    <!--<a class="navbar-item" href="{{ base_url }}">-->
-      <!--<img src="https://ui.adsabs.harvard.edu/styles/img/transparent_logo.svg" width="50" height="28"> ADS-->
-    <!--</a>-->
-  <!--</div>-->
 
-  <!--<div class="navbar-menu">-->
-  <!--{% if request.endpoint == "index" %}-->
-    <!--<form class="navbar-item is-expanded" method="GET" action="{{ base_url }}" novalidate>-->
-        <!--{{ form.q(size=64, autofocus=true, placeholder="search for something...") }}-->
-        <!--{{ form.sort(hidden=true) }}-->
-    <!--</form>-->
-    <!--{% endif %}-->
-  <!--</div>-->
-<!--</nav>-->
-
-      <!--<p>-->
-        <!--<center>-->
-          <!--<small>client id: {{ auth.client_id }}!</small> | <small>token: {{ auth.access_token }}!</small>-->
-          <!--<br/>-->
-          <!--<small>Rendered in {{ g.request_time() }}</small>-->
-        <!--</center>-->
-      </p>
-  </body>
-</html>
 

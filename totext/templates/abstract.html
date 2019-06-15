@@ -1,45 +1,727 @@
-{% extends "base.html" %}
+<html lang="en">
+<head profile="http://a9.com/-/spec/opensearch/1.1/">
+<meta charset="utf-8">
+<base href="{{ base_url }}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="google-site-verification" content="XxQuw38lagr8-TgtCyhAMP_6ELS9dy35fgrqo9dxw3o">
+<title>
+{% for title in doc.title %}
+{{ title }}{% if not loop.last %};{% endif %}
+{% endfor %}
+ - NASA/ADS</title>
+<meta name="description" content="A powerful, streamlined new Astrophysics Data System">
+<link rel="preload" href="//ui.adsabs.harvard.edu/styles/css/styles.css" as="style">
+<link rel="preload" href="//ui.adsabs.harvard.edu/libs/requirejs/require.js" as="script">
+<link rel="preload" href="//ui.adsabs.harvard.edu/shim.js" as="script">
+<link rel="stylesheet" href="//ui.adsabs.harvard.edu/styles/css/styles.css">
+<link rel="icon" type="image/png" sizes="32x32" href="//ui.adsabs.harvard.edu/styles/img/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="https://ui.adsabs.harvard.edu/opensearch.xml" title="ADS Search">
+<noscript>
+<style>
+#app-container {
+        display: none;
+      }
+      body {
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #noscriptmsg {
+        max-width: 450px;
+        padding: 10px;
+      }</style></noscript><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style>
 
-{% block content %}
 
-<section class="section">
-  <hr class="hr">
-  <div class="container">
-    <div>
-        <p>
-            <strong>
-              {% for title in doc.title %}
-              {{ title|safe }};
-              {% endfor %}
-            </strong>
-            <br>
-              {% for author in doc.author %}
-              <a href="{{ url_for('index', q='author:\"' + author + '\"') }}">{{ author }}</a>;
-              {% endfor %}
-            <br>
-            <br>
-            {{ doc.abstract|safe }}
-            <br>
-            <br>
-            <strong>Publication:</strong> {{ doc.pub }}
-            <br>
-            <strong>Publication date:</strong> {{ doc.pubdate }}
-            <br>
-            <strong>Bibcode:</strong> {{ doc.bibcode }}<br/>
-            <a href="{{ url_for('index', q='citations(bibcode:'+doc.bibcode+')') }}">Citations ({{ doc.citation_count }})</a>
-            |
-            <a href="{{ url_for('index', q='references(bibcode:'+doc.bibcode+')') }}">References</a>
-            |
-	    {% for esource in doc.esources %}
-	    <a href="{{ esource.url }}">{{ esource.link_type}}</a> |
-	    {% endfor %}
-            <a href="{{ url_for('export', bibcode=doc.bibcode) }}">BibTeX</a>
-        </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head><body style=""><div id="MathJax_Message" style="display: none;"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a href="#main-content" id="skip-to-main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<div id="aria-announcement-container">
+    Now on
+    article abstract page
+
+</div>
+<div id="app-container"><div id="body-template-container"><div class="s-master-page-manager"><div id="navbar-container">
+  <div data-widget="NavbarWidget"><div><nav class="navbar fluid navbar-inverse">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand s-navbar-brand" href="#"><img class="s-ads-icon" src="//ui.adsabs.harvard.edu/styles/img/transparent_logo.svg" alt="ads icon">
+                <h1> <b>ads</b></h1>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <button type="button" class="btn btn-primary-faded feedback-button" style="transition: none;" data-toggle="modal" data-target="#feedback-modal">
+                      <i class="fa fa-comment about-page-icon"></i> <a href="https://ui.adsabs.harvard.edu/abs/{{ doc.bibcode | urlencode }}/abstract" style="color: #FFFFFF">Full ADS</a>
+                    </button>
+                </li>
+
+            </ul>
+
+        </div>
+        <!-- /.navbar-collapse -->
+    
+</nav>
+<!-- /.container-fluid -->
+</div></div>
+</div>
+
+<div id="alerts-container">
+  <div data-widget="AlertsWidget"><span class="alert-banner"></span></div>
+</div>
+
+<div id="content-container">
+  <div class="dynamic-container s-dynamic-container"><div><div id="abstract-page-layout" class="s-abstract-page-layout">
+
+    <div class="row s-stable-search-bar-height">
+        <div class="s-search-bar-full-width-container">
+            <div class="col-xs-0 col-sm-12 col-md-2 s-back-button-container">&nbsp;</div>
+            <div class="col-xs-12 col-sm-9 col-md-7 s-search-bar-row" id="search-bar-row" data-widget="SearchWidget"><div class="s-search-bar-widget"><div role="search">
+  <div class="row">
+    <h2 class="sr-only">Search Bar to Enter New Query</h2>
+    <div class="col-sm-12 s-quick-add" aria-label="quick add fields">
+      <div id="expanded-search-form" class="unselectable">
+        <div id="field-options">
+          <span class="s-field-options">&nbsp;</span>
+        </div>
+      </div>
     </div>
   </div>
-</section>
+  <div class="row"></div>
+  <div class="row">
+    <div class="col-sm-12 search-bar-input-row s-search-bar-input-row">
+    <form name="main-query" action="{{ base_url }}">
+        <div class="form-group has-feedback">
+          <div class="input-group">
+            
+            <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input type="text" class="form-control q ui-autocomplete-input" name="q" aria-label="Start typing a query here to begin an ADS Search" autocomplete="off" value="" data-original-title="" title="">
+            <span class="input-group-btn">
+                       <button type="submit" class="btn btn-primary search-submit s-search-submit" style="transition: none;" aria-label="submit">
+                           <i class="fa fa-search"></i></button>
+                  </span>
+
+          </div>
+          <!-- /input-group -->
+        </div>
+        <!-- /form-group-->
+      </form>
+    </div>
+  </div>
+</div>
+
+</div></div>
+        </div>
+    </div>
+    <div class="row nav-button-container s-nav-button-container">
+       <button class="btn btn-primary-faded toggle-menu s-toggle-menu "> <i class="fa fa-bars"></i> Show Menu </button>
+     </div>
+    <div class="row s-dynamic-page-body" id="dynamic-page-body">
+        <div class="s-abstract-content">
+
+            <div class="col-sm-2 nav-container s-nav-container" id="left-column"> <div>
+<nav>
+    <div class="s-nav-header s-view-nav"> <i class="icon-list"></i> <h3>view </h3> </div>
+
+
+    <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" data-widget-id="ShowAbstract">
+    <div class="abstract-nav s-nav  s-nav-selected  ">
+            <span class="s-content">
+            Abstract
+            </span>
+    </div>
+    </a>
+
+
+    <a href="{{ url_for('index', q='citations(bibcode:'+doc.bibcode+')') }}" aria-disabled="true" data-widget-id="ShowCitations">
+    {% if doc.citation_count > 0 %}
+    <div class="abstract-nav s-nav ">
+    {% else %}
+    <div class="abstract-nav s-nav   s-nav-inactive ">
+    {% endif %}
+            <span class="s-content">
+            Citations 
+            <span class="num-items">({{ doc.citation_count }})</span>
+            </span>
+    </div>
+    </a>
+
+
+    <a href="{{ url_for('index', q='references(bibcode:'+doc.bibcode+')') }}" data-widget-id="ShowReferences">
+    {% if doc.reference_count > 0 %}
+    <div class="abstract-nav s-nav ">
+    {% else %}
+    <div class="abstract-nav s-nav   s-nav-inactive ">
+    {% endif %}
+            <span class="s-content">
+            References
+            <span class="num-items">({{ doc.reference_count }})</span>
+            </span>
+    </div>
+    </a>
+
+
+    <a href="{{ url_for('index', q='trending(bibcode:'+doc.bibcode+')') }}" aria-disabled="true" data-widget-id="ShowCoreads">
+    {% if doc.read_count > 0 %}
+    <div class="abstract-nav s-nav ">
+    {% else %}
+    <div class="abstract-nav s-nav   s-nav-inactive ">
+    {% endif %}
+            <span class="s-content">
+            Co-Reads
+            </span>
+    </div>
+    </a>
+
+
+    <a href="{{ url_for('index', q='similar(bibcode:'+doc.bibcode+')') }}" data-widget-id="ShowSimilar">
+    <div class="abstract-nav s-nav  ">
+            <span class="s-content">
+            Similar Papers
+            </span>
+    </div>
+    </a>
+
+
+    <a href="{{ url_for('export', bibcode=doc.bibcode) }}" data-widget-id="ShowExportcitation__default">
+      <div class="abstract-nav s-nav  ">
+        <span class="content">
+          Export Citation
+        </span>
+      </div>
+    </a>
+
+</nav>
+</div></div>
+
+            <div class="col-sm-9 col-md-7 s-middle-column" id="middle-column">
+                <!--id is for screen readers-->
+                <div class="main-content-container s-main-content-container" id="main-content" tabindex="-1">
+                    <div class="print-visible"><h2 style="margin-left:6.1%;">NASA/ADS</h2> </div>
+
+                    <div id="abstract-title-container" class="s-abstract-title-container"></div>
+                    <div id="current-subview">
+                        <div data-widget="ShowAbstract">
+                          <article class="s-abstract-metadata"><!--<div id="article-navigation">|</div>-->
+
+
+<h2 class="s-abstract-title">
+    {% for title in doc.title %}
+    {{ title|safe }}{% if not loop.last %};{% endif %}
+    {% endfor %}
+    <a href=""></a>
+</h2>
+
+
+<div id="authors-and-aff" class="s-authors-and-aff">
+    <ul class="list-inline">
+            {% if doc.author %}
+              {% for author in doc.author[:50] %}
+              <li class="author"><a href="{{ url_for('index', q='author:\"' + author + '\"') }}">{{ author }}</a></li>{% if not loop.last %};{% endif %}
+              {% endfor %}
+          {% endif %}
+                {% if doc.author|length > 50 %}
+                  <li>
+                    <em>and {{ doc.author|length - 50 }} more</em>
+                  </li>
+                {% endif %}
+    </ul>
+</div>
+
+<div class="s-abstract-text">
+    <h4 class="sr-only">Abstract</h4>
+    <p>
+        {{ doc.abstract|safe }}
+    </p>
+</div>
+
+<br>
+<dl class="s-abstract-dl-horizontal">
+
+    <dt>Publication:</dt>
+    <dd>
+    <div id="article-publication">{{ doc.pub }}</div>
+    </dd>
+
+    <dt>Pub Date:</dt>
+    <dd>{{ doc.pubdate[:-3] }}</dd>
+
+
+    <dt>Bibcode:</dt>
+    <dd>
+          {{ doc.bibcode }}
+    </dd>
 
 
 
 
-{% endblock %}
+</dl>
+
+</article></div>
+                        <div data-widget="ShowCitations"></div>
+                        <div data-widget="ShowReferences"></div>
+                        <div data-widget="ShowCoreads"></div>
+                        <div data-widget="ShowSimilar"></div>
+                        <div data-widget="ShowTableofcontents"></div>
+                        <div data-widget="ShowGraphics"></div>
+                        <div data-widget="ShowExportcitation" data-origin="abstract"></div>
+                        <div data-widget="ShowMetrics" data-allow-redirect="false"></div>
+                        <div data-widget="MetaTagsWidget"><div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="s-right-col-container col-sm-3 col-lg-2 s-right-column" id="right-col-container">
+                <div data-widget="ShowResources">
+<div>
+<div data-reactroot="" class="s-right-col-widget-container" style="padding: 10px;">
+
+  {% if "ESOURCE" in doc.property %}
+  <div class="resources__container">
+<div class="resources__full__list">
+<div class="resources__header__row">
+<i class="fa fa-file-text-o" aria-hidden="true">
+</i>
+<div class="resources__header__title">
+full text sources</div>
+{% if "PUB_OPENACCESS" in doc.property %}
+{% set pub_unlock = "unlock" %}
+{% else %}
+{% set pub_unlock = "" %}
+{% endif %}
+{% if "OPENACCESS" in doc.property %}
+{% set unlock = "unlock" %}
+{% else %}
+{% set unlock = "" %}
+{% endif %}
+</div>
+{% if "PUB_PDF" in doc.esources or "PUB_HTML" in doc.esources %}
+<div class="resources__content">
+<div class="resources__content__title">
+Publisher</div>
+<div class="resources__content__links">
+<span>
+  {% if "PUB_PDF" in doc.esources %}
+  <a href="//ui.adsabs.harvard.edu/link_gateway/{{ doc.bibcode }}/PUB_PDF" rel="noopener" class="resources__content__link {{ pub_unlock }}">
+<i class="fa fa-file-pdf-o" aria-hidden="true">
+</i>
+</a>
+  {% endif %}
+<div class="resources__content__link__separator">
+|</div>
+</span>
+<span>
+  {% if "PUB_HTML" in doc.esources %}
+  <a href="//ui.adsabs.harvard.edu/link_gateway/{{ doc.bibcode }}/PUB_HTML" rel="noopener" class="resources__content__link {{ pub_unlock }}">
+<i class="fa fa-file-text" aria-hidden="true">
+</i>
+</a>
+  {% endif %}
+</span>
+</div>
+</div>
+{% endif %}
+{% if "EPRINT_PDF" in doc.esources or "EPRINT_HTML" in doc.esources %}
+<div class="resources__content">
+<div class="resources__content__title">
+arXiv</div>
+<div class="resources__content__links">
+<span>
+  {% if "EPRINT_PDF" in doc.esources %}
+  <a href="//ui.adsabs.harvard.edu/link_gateway/{{ doc.bibcode }}/EPRINT_PDF" rel="noopener" class="resources__content__link {{ unlock }}">
+<i class="fa fa-file-pdf-o" aria-hidden="true">
+</i>
+</a>
+  {% endif %}
+<div class="resources__content__link__separator">
+|</div>
+</span>
+<span>
+  {% if "EPRINT_HTML" in doc.esources %}
+  <a href="//ui.adsabs.harvard.edu/link_gateway/{{ doc.bibcode }}/EPRINT_HTML" rel="noopener" class="resources__content__link {{ unlock }}">
+<i class="fa fa-file-text" aria-hidden="true">
+</i>
+</a>
+  {% endif %}
+</span>
+</div>
+</div>
+{% endif %}
+</div>
+
+{% else %}
+  <h3 class="s-right-col-widget-title">No Sources Found</h3>
+    <div class="resources__container"></div>
+{% endif %}
+
+</div>
+
+
+
+
+</div>
+</div>
+</div>
+
+                <div data-widget="ShowAssociated"><div><!-- react-empty: 1 --></div></div>
+            </div>
+
+            <div class="col-lg-1"></div>
+        </div>
+    </div>
+</div>
+
+</div></div>
+</div>
+
+<div id="footer-container">
+  <div data-widget="FooterWidget"><div class="footer s-footer"><footer>
+  <div class="__footer_wrapper">
+    <div class="__footer_brand">
+      © The SAO/NASA Astrophysics Data System
+      <div class="__footer_brand_extra">
+        <p>
+          <i class="fa fa-envelope"></i> adshelp[at]cfa.harvard.edu
+        </p>
+        <p>
+          The ADS is operated by the Smithsonian Astrophysical Observatory under NASA Cooperative Agreement <em>NNX16AC86A</em>
+        </p>
+      </div>
+      <div class="__footer_brand_logos">
+        <a href="http://www.nasa.gov" target="_blank" rel="noopener">
+          <img src="//ui.adsabs.harvard.edu/styles/img/nasa.svg" alt="NASA logo" id="nasa-logo">
+        </a>
+        <a href="http://www.si.edu" target="_blank" rel="noopener">
+          <img id="smithsonian-logo" src="//ui.adsabs.harvard.edu/styles/img/smithsonian.svg" alt="Smithsonian logo">
+        </a>
+        <a href="https://www.cfa.harvard.edu/" target="_blank" rel="noopener">
+          <img src="//ui.adsabs.harvard.edu/styles/img/cfa.png" title="Harvard Center for Astrophysics logo" id="cfa-logo">
+        </a>
+      </div>
+    </div>
+    <div class="__footer_list">
+      <div class="__footer_list_title">
+        Resources
+      </div>
+      <ul class="__footer_links">
+        <li>
+          <a href="//ui.adsabs.harvard.edu/about/" target="_blank" rel="noopener">
+            <i class="fa fa-question-circle"></i> About ADS
+          </a>
+        </li>
+        <li>
+          <a href="//adsabs.github.io/help/" target="_blank" rel="noopener">
+            <i class="fa fa-info-circle"></i> ADS Help
+          </a>
+        </li>
+        <li>
+          <a href="//ui.adsabs.harvard.edu/about/careers/" target="_blank" rel="noopener">
+            <i class="fa fa-group"></i> Careers@ADS
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="__footer_list">
+      <div class="__footer_list_title">
+        Social
+      </div>
+      <ul class="__footer_links">
+        <li>
+          <a href="//twitter.com/adsabs" target="_blank" rel="noopener">
+            <i class="fa fa-twitter"></i> @adsabs
+          </a>
+        </li>
+        <li>
+          <a href="//adsabs.github.io/blog/" target="_blank" rel="noopener">
+            <i class="fa fa-newspaper-o"></i> ADS Blog
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="__footer_list">
+      <div class="__footer_list_title">
+        Project
+      </div>
+      <ul class="__footer_links">
+        <li>
+          <a href="https://adsisdownorjustme.herokuapp.com/" target="_blank" rel="noopener">Is ADS down? (or is it just me...)</a>
+        </li>
+        <li>
+          <a href="http://www.si.edu" target="_blank" rel="noopener">Smithsonian Institution</a>
+        </li>
+        <li>
+          <a href="http://www.si.edu/Privacy" target="_blank" rel="noopener">Smithsonian Privacy Notice</a>
+        </li>
+        <li>
+          <a href="http://www.si.edu/Termsofuse" target="_blank" rel="noopener">Smithsonian Terms of Use</a>
+        </li>
+        <li>
+          <a href="http://www.cfa.harvard.edu/sao" target="_blank" rel="noopener">Smithsonian Astrophysical Observatory</a>
+        </li>
+        <li>
+          <a href="http://www.nasa.gov" target="_blank" rel="noopener">NASA</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</footer>
+</div></div>
+</div>
+</div></div></div>
+</body></html>

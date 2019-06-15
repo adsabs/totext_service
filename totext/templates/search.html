@@ -1,160 +1,615 @@
-{% extends "base.html" %}
+<html lang="en">
+<head profile="http://a9.com/-/spec/opensearch/1.1/">
+<meta charset="utf-8">
+<base href="{{ base_url }}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="google-site-verification" content="XxQuw38lagr8-TgtCyhAMP_6ELS9dy35fgrqo9dxw3o">
+<title>
+{{ form.q.data }} - NASA/ADS</title>
+<meta name="description" content="A powerful, streamlined new Astrophysics Data System">
+<link rel="preload" href="//ui.adsabs.harvard.edu/styles/css/styles.css" as="style">
+<link rel="preload" href="//ui.adsabs.harvard.edu/libs/requirejs/require.js" as="script">
+<link rel="preload" href="//ui.adsabs.harvard.edu/shim.js" as="script">
+<link rel="stylesheet" href="//ui.adsabs.harvard.edu/styles/css/styles.css">
+<link rel="icon" type="image/png" sizes="32x32" href="//ui.adsabs.harvard.edu/styles/img/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="https://ui.adsabs.harvard.edu/opensearch.xml" title="ADS Search">
+<noscript>
+<style>
+#app-container {
+        display: none;
+      }
+      body {
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #noscriptmsg {
+        max-width: 450px;
+        padding: 10px;
+      }</style></noscript><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style>
 
-{% block content %}
 
-    <div class="col-xs-3 col-sm-3 col-md-1 left-nav sidebar-offcanvas">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head><body style=""><div id="MathJax_Message" style="display: none;"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a href="#main-content" id="skip-to-main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<div id="aria-announcement-container">
+    Now on
+    search results page
+
+</div>
+<div id="app-container"><div id="body-template-container"><div class="s-master-page-manager"><div id="navbar-container">
+  <div data-widget="NavbarWidget"><div><nav class="navbar fluid navbar-inverse">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand s-navbar-brand" href="#"><img class="s-ads-icon" src="//ui.adsabs.harvard.edu/styles/img/transparent_logo.svg" alt="ads icon">
+                <h1> <b>ads</b></h1>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <button type="button" class="btn btn-primary-faded feedback-button" style="transition: none;" data-toggle="modal" data-target="#feedback-modal">
+                      <i class="fa fa-comment about-page-icon"></i> <a href="https://ui.adsabs.harvard.edu/search/q={{ form.q.data | urlencode }}&sort={{ form.sort.data }}&start={{ form.start.data }}&rows={{ form.rows.data }}" style="color: #FFFFFF">Full ADS</a>
+                    </button>
+                </li>
+
+            </ul>
+
+        </div>
+        <!-- /.navbar-collapse -->
+    
+</nav>
+<!-- /.container-fluid -->
+</div></div>
+</div>
+
+<div id="alerts-container">
+  <div data-widget="AlertsWidget"><span class="alert-banner"></span></div>
+</div>
+
+<div id="content-container">
+  <div class="dynamic-container s-dynamic-container"><div><div id="results-page-layout" class="s-results-page-layout">
+    <div class="row s-stable-search-bar-height">
+      <div class="col-xs-0 col-sm-12 col-md-2 s-back-button-container"></div>
+        <div class="s-search-bar-full-width-container">
+            <div class="col-xs-12 col-sm-9 col-md-7 s-search-bar-row" id="search-bar-row" data-widget="SearchWidget"><div class="s-search-bar-widget"><div role="search">
+  <div class="row">
+    <h2 class="sr-only">Search Bar to Enter New Query</h2>
+    <div class="col-sm-12 s-quick-add" aria-label="quick add fields">
+      <div id="expanded-search-form" class="unselectable">
+        <div id="field-options">
+          <span class="s-field-options">&nbsp;</span>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="row"></div>
+  <div class="row">
+    <div class="col-sm-12 search-bar-input-row s-search-bar-input-row">
+      <form name="main-query" action="{{ base_url }}">
+        <div class="form-group has-feedback">
+          <div class="input-group">
+            
+            <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+            {{ form.q(size=64, class="form-control q ui-autocomplete-input", autocomplete="off") }}
+            <span class="input-group-btn">
+                       <button type="submit" class="btn btn-primary search-submit s-search-submit" style="transition: none;" aria-label="submit">
+                           <i class="fa fa-search"></i></button>
+                  </span>
 
-    <div class="post main-content col-xs-12 col-md-9">
-
-      <header class="post-header">
-      </header>
-
-      <article class="post-content">
-
-        <div class="row">
-          <div class="col-sm-12 search-bar-input-row s-search-bar-input-row">
-            <form name="main-query" action="{{ base_url }}">
-              <div class="form-group has-feedback">
-                <div class="input-group">
-                  
-                  <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
-                  {{ form.q(size=64, autofocus=true, class="form-control q ui-autocomplete-input", autocomplete="off") }}
-                  
-                  <i class="icon-clear s-clear-control"></i> 
-                  <span class="input-group-btn">
-                             <button type="submit" class="btn btn-primary search-submit s-search-submit" aria-label="submit">
-                                 <i class="fa fa-search"></i></button>
-                        </span>
-
-                </div>
-                <!-- /input-group -->
-              </div>
-              <!-- /form-group-->
-            </form>
           </div>
+          <!-- /input-group -->
         </div>
+        <!-- /form-group-->
+      </form>
+    </div>
+  </div>
+</div>
+<div class="row">
+    <div class="s-num-found">
+      <span class="s-light-font description">Your search returned</span>
+      <b><span class="num-found-container">{{ "{:,.0f}".format(results.numFound) }}</span></b>
+        <span class="s-light-font"> results
+          {% if stats and stats.stats_fields.citation_count %}
+           with <b><span class="num-found-container">{{ "{:,.0f}".format(stats.stats_fields.citation_count.sum) }}</span></b> total citations
+          {% endif %}
+          {% if stats and stats.stats_fields.citation_count_norm %}
+           with <b><span class="num-found-container">{{ "{:,.0f}".format(stats.stats_fields.citation_count_norm.sum) }}</span></b> total normalized citations
+          {% endif %}
+          &nbsp;&nbsp;<small>[{{ qtime }} | {{ g.request_time() }}]</small>
+        </span>
+    </div>
+</div>
 
-<section >
+</div></div>
+        </div>
+    </div>
+    <div class="row s-message-control-row" id="message-control-row"><span data-widget="AlertsWidgetx"></span></div>
+    <div class="row s-results-control-row" id="results-control-row" style="display: block;">
+    <div class="s-results-control-row-container">
+    <div class="col-sm-6">
+        <div data-widget="BreadcrumbsWidget" class="s-display-inline-block"><div><div id="filter-visualizer">
+
+</div></div></div>
+    </div>
+
+
+    <div class="col-sm-6" style="padding-right:0">
+        <div class="s-results-action-buttons">
+            <div class="col-md-6 clearfix" style="margin-bottom:10px;">
+            </div>
+            <div class="col-md-6">
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
     <div class="row">
-    <div class="col-md-5 col-md-offset-4">
-        <p><strong>{{ results.numFound }}</strong> records found ( {{ qtime }} | {{ g.request_time() }} )</p>
-    </div>
-    </div>
+        <div class="col-xs-12 s-dynamic-page-body" id="dynamic-page-body">
+            <div class="max-width-wrapper">
+                <div class="row">
+                    <div class="hidden-xs col-sm-3 col-md-2 s-left-column s-results-column" id="results-left-column">
+                    </div>
 
-    <div>
-        <div data-widget="Results">
-            <div class="list-of-things">
-                <div class="s-results-widget results-widget">
-                    <div class="row">
-                        <ul class="col-sm-12 results-list  s-results-list list-unstyled s-display-block" aria-label="list of results">
+                    <div class="col-sm-9 col-md-7  s-results-middle-column s-results-column" id="results-middle-column">
+                        <div class="main-content-container s-main-content-container" id="main-content" tabindex="-1" role="main" aria-label="container for search results and other main content">
+                            <div data-widget="Results"><div class="list-of-things"><div class="s-results-widget results-widget">
+  <div class="row s-list-controls">
+    <div class="s-results-border-bottom">
+      <div class="col-xs-1 s-checkbox-col">
+              &nbsp;
+      </div>
 
-      {% for doc in results.docs %}
-
-      <li>
-      <div class="col-sm-12 ">
-        <div class="row s-top-row">
-            <div class="hidden-xs hidden-sm col-md-4 s-top-row-col identifier s-identifier">
-                <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" aria-label="bibcode" class="abs-redirect-link" style="color: #5D5D5D;">
-                     {{ doc.bibcode }}
-                </a>
-            </div>
-            <div class="col-xs-2 col-md-2 col-md-offset-0 s-top-row-col" aria-label="date published" style="color: #5D5D5D;">
-                 {{ doc.pubdate[:-3] }}
-            </div>
-            <div class="col-xs-3 col-sm-4 col-md-2 s-top-row-col">
-                {% if doc.citation_count > 0 %}
-                <a href="{{ url_for('index', q='citations(bibcode:'+doc.bibcode+')') }}" title="citation count" class="citations-redirect-link">cited: {{ doc.citation_count }}</a>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row s-top-row">
-            <div class="col-xs-10 ">
-                    <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" class="abs-redirect-link">
-                        <strong>{{ doc.title[0]|safe }}</strong>
-                    </a>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-10">
-                {% for auth in doc.author %}
-                    <ul class="list-inline just-authors s-results-authors less-authors" style="display: inline-block;" aria-label="authors">
-                        <li class="article-author">{{ auth }};</li>
-                    </ul>
-                {% endfor %}
-            </div>
-
-        </div>
-
-        <br/>
-
-        </div>
-</li>
-
-
-
-    {% endfor %}
-    </ul>
-    </div>
-    </div>
-    </div>
-    </div>
-
-    </div>
-
-    <div class="is-5 flex-item">
-        <p><center>
-        {% if form.start.data - form.rows.data >= 0 %}
-        <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&rows={{ form.rows.data }}&start={{ form.start.data - form.rows.data }}" title="next" class="is-size-6">previous</a> |
-        {% endif %}
-        {{ ((form.start.data / form.rows.data) + 1) | int  }} of
-        {{ (results.numFound / form.rows.data) | round(0, 'ceil')| int }} pages
-        {% if results.numFound - (form.start.data + form.rows.data) > 0 %}
-        | <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&rows={{ form.rows.data }}&start={{ form.start.data + form.rows.data }}" title="next" class="is-size-6">next</a>
-        {% endif %}
-        </center></p>
     </div>
   </div>
 
+  <div class="row">
+      <h2 class="sr-only">Search Results</h2>
+      <ul class="col-sm-12 results-list  s-results-list list-unstyled s-display-block" aria-label="list of results">
+        
+        
+{% for doc in results.docs %}
 
-    <div class="col-xs-3 col-sm-3 col-md-1 left-nav sidebar-offcanvas">
+<li><div class="col-sm-12 ">
+<div class="row s-top-row">
+
+    <div class="col-xs-1 s-checkbox-col s-top-row-col">
+        <label>
+          {{ form.start.data+loop.index }}
+        </label>
+    </div>
+
+    <div class="hidden-xs hidden-sm col-md-3 s-top-row-col identifier s-identifier">
+        <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" aria-label="bibcode" class="abs-redirect-link">
+             {{ doc.bibcode }}
+        </a>
+    </div>
+    <div class="col-xs-2 col-md-2 col-md-offset-0 s-top-row-col" aria-label="date published">
+         {{ doc.pubdate[:-3] }}
+    </div>
+    <div class="col-xs-3 col-sm-4 col-md-2 s-top-row-col">
+        {% if doc.citation_count > 0 %}
+        <a href="{{ url_for('index', q='citations(bibcode:'+doc.bibcode+')') }}" title="citation count" class="citations-redirect-link">cited: {{ doc.citation_count }}</a>
+        {% endif %}
+    </div>
+    <div class="col-xs-4 col-sm-4 pull-right">
+        <div class="s-results-links">
+
+
+
+            <div class="letter-icon s-letter-icon">
+              {% if doc.reference_count > 0 %}
+              <a href="{{ url_for('index', q='references(bibcode:'+doc.bibcode+')') }}" class="btn-link active-link s-active-link" style="transition: none;" aria-disabled="false">
+                  <i class="s-list-icon" aria-label="quick links to lists of references, citations and more"></i>
+              </a>
+              {% else %}
+              <a href="javascript:void(0)" class="btn-link disabled" aria-disabled="true" aria-label="quick links to lists of references, citations etc">
+                      <i class="s-list-icon" aria-hidden="true"></i>
+                  </a>
+              {% endif %}
+            </div>
+      </div>
+    </div>
+
+</div>
+<div class="row">
+
+    <div class="col-xs-10 col-xs-offset-1">
+            <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" class="abs-redirect-link">
+                <h3 class="s-results-title">{{ doc.title[0]|safe }}</h3>
+            </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-10 col-xs-offset-1">
+
+            <ul class="list-inline just-authors s-results-authors less-authors" aria-label="authors">
+                {% if doc.author %}
+                  {% for auth in doc.author[:10] %}
+                      <li class="article-author">{{ auth }}{% if not loop.last %};{% endif %}
+                      </li>
+                  {% endfor %}
+                  {% if doc.author|length > 10 %}
+                    <li>
+                      <em>and {{ doc.author|length - 10 }} more</em>
+                    </li>
+                  {% endif %}
+                {% endif %}
+            </ul>
+
+    </div>
+
+</div>
+
+
+    <div class="row highlight-row">
+    </div>
+
+    <div class="row abstract-row">
+    </div>
+</div>
+</li>
+        
+{% endfor %}
+        
+        
+        
+        
+</ul>
+  </div>
+      <div class="row">
+          <div class="col-sm-12 page-loading" style="text-align:center">
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-12 pagination-controls s-pagination-controls">
+              <div class="col-xs-5 per-page-container">
+                  <div class="form-group">
+                    <label for="per-page-select" class="col-xs-4 control-label">Per Page</label>
+                    <div class="col-xs-8 col-sm-5">
+
+                      {% for num in (25, 100, 500) %}
+                        {% if form.rows.data == num %}
+                          <b>{{num}}</b>
+                        {% else %}
+                          <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&start={{ form.start.data }}&rows={{ num }}">{{ num }}</a>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+              </div>
+              <div class="col-xs-6">
+                  <nav>
+                      <ul class="pager">
+                          {% if form.start.data - form.rows.data >= 0 %}
+                          <li class=""><a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&rows={{ form.rows.data }}&start={{ form.start.data - form.rows.data }}" class="page-control previous-page"><i class="fa fa-chevron-circle-left"></i> prev</a></li>
+                          {% else %}
+                          <li class=" disabled "><a href="#" class="page-control previous-page"><i class="fa fa-chevron-circle-left"></i> prev</a></li>
+                          {% endif %}
+                          {{ ((form.start.data / form.rows.data) + 1) | int  }} of
+                          {{ (results.numFound / form.rows.data) | round(0, 'ceil')| int }}
+                          {% if results.numFound - (form.start.data + form.rows.data) > 0 %}
+                          <li class=""><a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data }}&rows={{ form.rows.data }}&start={{ form.start.data + form.rows.data }}" class="page-control next-page">next <i class="fa fa-chevron-circle-right"></i></a></li>
+                          {% else %}
+                          <li class=" disabled"><a href="#" class="page-control next-page">next <i class="fa fa-chevron-circle-right"></i></a></li>
+                          {% endif %}
+                      </ul>
+                  </nav>
+      
+              </div>
+          </div>
+      </div>
+</div>
+</div></div>
+                            <div data-widget="AuthorAffiliationTool"></div>
+                            <div data-widget="ExportWidget" data-origin="results-page"></div>
+                            <div data-widget="AuthorNetwork"></div>
+                            <div data-widget="PaperNetwork"></div>
+                            <div data-widget="Metrics" data-allow-redirect="true"></div>
+                            <div data-widget="BubbleChart"></div>
+                            <div data-widget="ConceptCloud"></div>
+                            <div data-widget="CitationHelper"></div>
+                        </div>
+                    </div>
+
+                    <div class="hidden-xs col-sm-2 col-md-2 results-right-column s-right-column s-results-column" id="results-right-column">
+                        <h2 class="sr-only">Additional Functionality (Information about your query, and more search filters)</h2>
+
+                        <div data-widget="QueryInfo"><div class="query-info-widget s-query-info-widget"><div class="s-right-col-widget-container">
+    <div>
+      <span class="">
             <p>
-              <strong>Sort By</strong>
-              <span class="is-pulled-right">
+              <div class="row">
+              <div class="col-xs-5 col-sm-5 pull-left">
+              <strong>Sort by</strong>
+              </div>
+              <div class="col-xs-4 col-sm-4 pull-right">
                 {% if " desc" in form.sort.data %}
                     <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ form.sort.data | replace(" desc", " asc")  }}&rows={{ form.rows.data }}" title="set sort direction">asc</a>
                 {% else %}
                     <a href="{{ base_url}}?q={{ form.q.data }}&sort={{ form.sort.data | replace(" asc", " desc")  }}&rows={{ form.rows.data }}" title="set sort direction">desc</a>
                 {% endif %}
-              </span>
+              </div>
+              </div>
             </p>
             <p>
               {% for opt in sort_options %}
               <div>
-                {% if opt.id in form.sort.data %}
+                {% if form.sort.data|replace(" asc", "")|replace(" desc", "") == opt.id %}
                     <div>{{ opt.text }}</div>
                 {% else %}
                   {% if " desc" in form.sort.data %}
-                      <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ opt.id }} desc&rows={{ form.rows.data }}" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
+                  <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ opt.id }} desc&rows={{ form.rows.data }}" title="{{ opt.description }}">{{ opt.text }}</a>
                   {% else %}
-                      <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ opt.id }} asc&rows={{ form.rows.data }}" title="{{ opt.description }}" class="is-size-6">{{ opt.text }}</a>
+                      <a href="{{ base_url }}?q={{ form.q.data }}&sort={{ opt.id }} asc&rows={{ form.rows.data }}" title="{{ opt.description }}">{{ opt.text }}</a>
                   {% endif %}
                 {% endif %}
               </div>
               {% endfor %}
             </p>
-
+      </span>
     </div>
+</div>
 
+</div></div>
+                    </div>
+                </div>
+            </div>
 
-
-
-</section>
-
-      </article>
-
+        </div>
     </div>
+</div>
+</div></div>
+</div>
 
-{% endblock %}
-
+<div id="footer-container">
+  <div data-widget="FooterWidget"><div class="footer s-footer"><footer>
+  <div class="__footer_wrapper">
+    <div class="__footer_brand">
+      © The SAO/NASA Astrophysics Data System
+      <div class="__footer_brand_extra">
+        <p>
+          <i class="fa fa-envelope"></i> adshelp[at]cfa.harvard.edu
+        </p>
+        <p>
+          The ADS is operated by the Smithsonian Astrophysical Observatory under NASA Cooperative Agreement <em>NNX16AC86A</em>
+        </p>
+      </div>
+      <div class="__footer_brand_logos">
+        <a href="http://www.nasa.gov" target="_blank" rel="noopener">
+          <img src="//ui.adsabs.harvard.edu/styles/img/nasa.svg" alt="NASA logo" id="nasa-logo">
+        </a>
+        <a href="http://www.si.edu" target="_blank" rel="noopener">
+          <img id="smithsonian-logo" src="//ui.adsabs.harvard.edu/styles/img/smithsonian.svg" alt="Smithsonian logo">
+        </a>
+        <a href="https://www.cfa.harvard.edu/" target="_blank" rel="noopener">
+          <img src="//ui.adsabs.harvard.edu/styles/img/cfa.png" title="Harvard Center for Astrophysics logo" id="cfa-logo">
+        </a>
+      </div>
+    </div>
+    <div class="__footer_list">
+      <div class="__footer_list_title">
+        Resources
+      </div>
+      <ul class="__footer_links">
+        <li>
+          <a href="//ui.adsabs.harvard.edu/about/" target="_blank" rel="noopener">
+            <i class="fa fa-question-circle"></i> About ADS
+          </a>
+        </li>
+        <li>
+          <a href="//adsabs.github.io/help/" target="_blank" rel="noopener">
+            <i class="fa fa-info-circle"></i> ADS Help
+          </a>
+        </li>
+        <li>
+          <a href="//ui.adsabs.harvard.edu/about/careers/" target="_blank" rel="noopener">
+            <i class="fa fa-group"></i> Careers@ADS
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="__footer_list">
+      <div class="__footer_list_title">
+        Social
+      </div>
+      <ul class="__footer_links">
+        <li>
+          <a href="//twitter.com/adsabs" target="_blank" rel="noopener">
+            <i class="fa fa-twitter"></i> @adsabs
+          </a>
+        </li>
+        <li>
+          <a href="//adsabs.github.io/blog/" target="_blank" rel="noopener">
+            <i class="fa fa-newspaper-o"></i> ADS Blog
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="__footer_list">
+      <div class="__footer_list_title">
+        Project
+      </div>
+      <ul class="__footer_links">
+        <li>
+          <a href="https://adsisdownorjustme.herokuapp.com/" target="_blank" rel="noopener">Is ADS down? (or is it just me...)</a>
+        </li>
+        <li>
+          <a href="http://www.si.edu" target="_blank" rel="noopener">Smithsonian Institution</a>
+        </li>
+        <li>
+          <a href="http://www.si.edu/Privacy" target="_blank" rel="noopener">Smithsonian Privacy Notice</a>
+        </li>
+        <li>
+          <a href="http://www.si.edu/Termsofuse" target="_blank" rel="noopener">Smithsonian Terms of Use</a>
+        </li>
+        <li>
+          <a href="http://www.cfa.harvard.edu/sao" target="_blank" rel="noopener">Smithsonian Astrophysical Observatory</a>
+        </li>
+        <li>
+          <a href="http://www.nasa.gov" target="_blank" rel="noopener">NASA</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</footer>
+</div></div>
+</div>
+</div></div></div>
+</body></html>
