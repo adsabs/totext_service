@@ -218,7 +218,16 @@
 </div>
 
 <div id="alerts-container">
-  <div data-widget="AlertsWidget"><span class="alert-banner"></span></div>
+  {% if error %}
+  <div data-widget="AlertsWidget"><span class="alert-banner">    <div class="alert alert-info" id="page-top-alert">
+        <div>
+          {{ error }}<br/><b><a href="{{ base_url }}">Try looking at the search examples on the home page</a></b>  or <b><a href="https://adsabs.github.io/help/search/search-syntax" target="_blank" rel="noopener">reading our help page</a>.</b>
+        </div>
+        <div>
+        </div>
+    </div>
+</span></div>
+  {% endif %}
 </div>
 
 <div id="content-container">
@@ -260,6 +269,7 @@
   </div>
 </div>
 <div class="row">
+  {% if results %}
     <div class="s-num-found">
       <span class="s-light-font description">Your search returned</span>
       <b><span class="num-found-container">{{ "{:,.0f}".format(results.numFound) }}</span></b>
@@ -273,6 +283,7 @@
           &nbsp;&nbsp;<small>[{{ qtime }} | {{ g.request_time() }}]</small>
         </span>
     </div>
+  {% endif %}
 </div>
 
 </div></div>
@@ -321,7 +332,41 @@
   <div class="row">
       <h2 class="sr-only">Search Results</h2>
       <ul class="col-sm-12 results-list  s-results-list list-unstyled s-display-block" aria-label="list of results">
-        
+
+{% if not results %}
+<div><div class="container-fluid">
+  <div class="row text-center">
+    <span class="fa-stack fa-lg text-danger">
+      <i class="fa fa-stack-2x fa-circle-o"></i>
+      <i class="fa fa-stack-1x fa-exclamation"></i>
+    </span>
+  </div>
+  <div class="row text-center">
+    <div class="h4">
+      Something Went Wrong
+    </div>
+    <div class="h4">
+      Please Retry Your Search
+    </div>
+  </div>
+</div>
+</div>
+{% else %}
+  {% if results.docs | length == 0 %}
+          <div><div class="s-empty-view-msg">
+    <div class="h4">
+      Sorry no results were found for:</p>
+    </div>
+    <p><code>{{ form.q.data }}</code></p>
+    <ul>
+      <li>Try broadening your search</li>
+      <li><a href="{{ base_url }}">Check out some examples</a></li>
+      <li><a href="https://adsabs.github.io/help/search/search-syntax" target="_blank" rel="noopener">Read our help pages</a></li>
+    </ul>
+  </div>
+  </div>
+  {% endif %}
+{% endif %}
         
 {% for doc in results.docs %}
 
@@ -335,7 +380,7 @@
     </div>
 
     <div class="hidden-xs hidden-sm col-md-3 s-top-row-col identifier s-identifier">
-        <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" aria-label="bibcode" class="abs-redirect-link">
+        <a href="{{ url_for('abs', identifier=doc.bibcode) }}" aria-label="bibcode" class="abs-redirect-link">
              {{ doc.bibcode }}
         </a>
     </div>
@@ -358,7 +403,7 @@
                   <i class="s-list-icon" aria-label="quick links to lists of references, citations and more"></i>
               </a>
               {% else %}
-              <a href="javascript:void(0)" class="btn-link disabled" aria-disabled="true" aria-label="quick links to lists of references, citations etc">
+              <a href="#" class="btn-link disabled" aria-disabled="true" aria-label="quick links to lists of references, citations etc">
                       <i class="s-list-icon" aria-hidden="true"></i>
                   </a>
               {% endif %}
@@ -370,7 +415,7 @@
 <div class="row">
 
     <div class="col-xs-10 col-xs-offset-1">
-            <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" class="abs-redirect-link">
+            <a href="{{ url_for('abs', identifier=doc.bibcode) }}" class="abs-redirect-link">
                 <h3 class="s-results-title">{{ doc.title[0]|safe }}</h3>
             </a>
     </div>
@@ -417,6 +462,7 @@
           <div class="col-sm-12 page-loading" style="text-align:center">
           </div>
       </div>
+{% if results.docs | length > 1 %}
       <div class="row">
           <div class="col-sm-12 pagination-controls s-pagination-controls">
               <div class="col-xs-5 per-page-container">
@@ -455,6 +501,7 @@
               </div>
           </div>
       </div>
+{% endif %}
 </div>
 </div></div>
                             <div data-widget="AuthorAffiliationTool"></div>
@@ -468,6 +515,7 @@
                         </div>
                     </div>
 
+{% if results.docs | length > 0 %}
                     <div class="hidden-xs col-sm-2 col-md-2 results-right-column s-right-column s-results-column" id="results-right-column">
                         <h2 class="sr-only">Additional Functionality (Information about your query, and more search filters)</h2>
 
@@ -509,6 +557,7 @@
 
 </div></div>
                     </div>
+{% endif %}
                 </div>
             </div>
 

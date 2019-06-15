@@ -6,10 +6,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="google-site-verification" content="XxQuw38lagr8-TgtCyhAMP_6ELS9dy35fgrqo9dxw3o">
 <title>
+{% if doc %}
 {% for title in doc.title %}
 {{ title }}{% if not loop.last %};{% endif %}
 {% endfor %}
- - NASA/ADS</title>
+ - 
+{% endif %}
+NASA/ADS</title>
 <meta name="description" content="A powerful, streamlined new Astrophysics Data System">
 <link rel="preload" href="//ui.adsabs.harvard.edu/styles/css/styles.css" as="style">
 <link rel="preload" href="//ui.adsabs.harvard.edu/libs/requirejs/require.js" as="script">
@@ -324,7 +327,16 @@
 </div>
 
 <div id="alerts-container">
-  <div data-widget="AlertsWidget"><span class="alert-banner"></span></div>
+  {% if error %}
+  <div data-widget="AlertsWidget"><span class="alert-banner">    <div class="alert alert-info" id="page-top-alert">
+        <div>
+          {{ error }}<br/><b><a href="{{ base_url }}">Try looking at the search examples on the home page</a></b>  or <b><a href="https://adsabs.github.io/help/search/search-syntax" target="_blank" rel="noopener">reading our help page</a>.</b>
+        </div>
+        <div>
+        </div>
+    </div>
+</span></div>
+  {% endif %}
 </div>
 
 <div id="content-container">
@@ -369,9 +381,6 @@
 </div></div>
         </div>
     </div>
-    <div class="row nav-button-container s-nav-button-container">
-       <button class="btn btn-primary-faded toggle-menu s-toggle-menu "> <i class="fa fa-bars"></i> Show Menu </button>
-     </div>
     <div class="row s-dynamic-page-body" id="dynamic-page-body">
         <div class="s-abstract-content">
 
@@ -380,15 +389,24 @@
     <div class="s-nav-header s-view-nav"> <i class="icon-list"></i> <h3>view </h3> </div>
 
 
-    <a href="{{ url_for('abs', bibcode=doc.bibcode) }}" data-widget-id="ShowAbstract">
+    {% if doc %}
+    <a href="{{ url_for('abs', identifier=doc.bibcode) }}" data-widget-id="ShowAbstract">
     <div class="abstract-nav s-nav  s-nav-selected  ">
             <span class="s-content">
             Abstract
             </span>
     </div>
     </a>
+    {% else %}
+    <div class="abstract-nav s-nav  s-nav-selected  s-nav-inactive">
+            <span class="s-content">
+            Abstract
+            </span>
+    </div>
+    {% endif %}
 
 
+    {% if doc %}
     <a href="{{ url_for('index', q='citations(bibcode:'+doc.bibcode+')') }}" aria-disabled="true" data-widget-id="ShowCitations">
     {% if doc.citation_count > 0 %}
     <div class="abstract-nav s-nav ">
@@ -401,8 +419,10 @@
             </span>
     </div>
     </a>
+    {% endif %}
 
 
+    {% if doc %}
     <a href="{{ url_for('index', q='references(bibcode:'+doc.bibcode+')') }}" data-widget-id="ShowReferences">
     {% if doc.reference_count > 0 %}
     <div class="abstract-nav s-nav ">
@@ -415,8 +435,10 @@
             </span>
     </div>
     </a>
+    {% endif %}
 
 
+    {% if doc %}
     <a href="{{ url_for('index', q='trending(bibcode:'+doc.bibcode+')') }}" aria-disabled="true" data-widget-id="ShowCoreads">
     {% if doc.read_count > 0 %}
     <div class="abstract-nav s-nav ">
@@ -428,8 +450,10 @@
             </span>
     </div>
     </a>
+    {% endif %}
 
 
+    {% if doc %}
     <a href="{{ url_for('index', q='similar(bibcode:'+doc.bibcode+')') }}" data-widget-id="ShowSimilar">
     <div class="abstract-nav s-nav  ">
             <span class="s-content">
@@ -437,15 +461,18 @@
             </span>
     </div>
     </a>
+    {% endif %}
 
 
-    <a href="{{ url_for('export', bibcode=doc.bibcode) }}" data-widget-id="ShowExportcitation__default">
+    {% if doc %}
+    <a href="{{ url_for('export', identifier=doc.bibcode) }}" data-widget-id="ShowExportcitation__default">
       <div class="abstract-nav s-nav  ">
         <span class="content">
           Export Citation
         </span>
       </div>
     </a>
+    {% endif %}
 
 </nav>
 </div></div>
@@ -459,6 +486,7 @@
                     <div id="current-subview">
                         <div data-widget="ShowAbstract">
                           <article class="s-abstract-metadata"><!--<div id="article-navigation">|</div>-->
+{% if doc %}
 
 
 <h2 class="s-abstract-title">
@@ -512,8 +540,26 @@
 
 
 </dl>
+{% else %}
+  <div class="row text-center">
+    <span class="fa-stack fa-lg text-danger">
+      <i class="fa fa-stack-2x fa-circle-o"></i>
+      <i class="fa fa-stack-1x fa-exclamation"></i>
+    </span>
+  </div>
+  <div class="row text-center">
+    <div class="h4">
+      Something Went Wrong
+    </div>
+    <div class="h4">
+      Please Retry Your Search
+    </div>
+  </div>
 
-</article></div>
+{% endif %}
+
+</article>
+                        </div>
                         <div data-widget="ShowCitations"></div>
                         <div data-widget="ShowReferences"></div>
                         <div data-widget="ShowCoreads"></div>

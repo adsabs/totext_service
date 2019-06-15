@@ -2,6 +2,7 @@ from flask import render_template, session, request, redirect, g, current_app, u
 from totext import app
 from totext.forms import ModernForm, PaperForm, ClassicForm
 from datetime import datetime
+from requests.exceptions import ConnectionError, ConnectTimeout, ReadTimeout
 import urllib
 import time
 import os
@@ -17,7 +18,7 @@ EXPORT_SERVICE = os.environ.get('EXPORT_SERVICE', API_URL+"export/bibtex")
 VAULT_SERVICE = os.environ.get('VAULT_SERVICE', API_URL+"vault/query")
 OBJECTS_SERVICE = os.environ.get('OBJECTS_SERVICE', API_URL+"objects/query")
 ESOURCE_SERVICE = os.environ.get('ESOURCE_SERVICE', API_URL+"resolver/{}/esource")
-API_TIMEOUT = 30
+API_TIMEOUT = 90
 SORT_OPTIONS = [
     { 'id': 'author_count', 'text': 'Authors', 'description': 'sort by number of authors' },
     { 'id': 'bibcode', 'text': 'Bibcode', 'description': 'sort by bibcode' },
@@ -59,23 +60,36 @@ def before_request():
         auth = r.json()
         session['auth'] = { 'access_token': auth['access_token'], 'expire_in': auth['expire_in'] }
 
-def abstract(bibcode):
+def abstract(identifier):
     """
     Retrieve abstract
     """
     headers = { "Authorization": "Bearer:{}".format(session['auth']['access_token']), }
     params = urllib.urlencode({
             'fl': 'title,bibcode,author,pub,pubdate,abstract,citation_count,[citations],read_count,esources,property',
-            'q': 'bibcode:{0}'.format(bibcode),
+            'q': 'identifier:{0}'.format(identifier),
             'rows': '25',
             'sort': 'date desc, bibcode desc',
             'start': '0'
             })
-    r = current_app.client.get(SEARCH_SERVICE + "?" + params, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
-    r.raise_for_status()
+    try:
+        r = current_app.client.get(SEARCH_SERVICE + "?" + params, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
+    except (ConnectionError, ConnectTimeout, ReadTimeout) as e:
+        msg = str(e)
+        return {"error": "{}".format(msg)}
+    if not r.ok:
+        try:
+            msg = r.json().get('error', {}).get('msg')
+        except:
+            msg = r.content
+        return {"error": "{} (HTTP status code {})".format(msg, r.status_code)}
+    #r.raise_for_status()
     r.cookies.clear_expired_cookies()
     session['cookies'].update(r.cookies.get_dict())
-    return r.json()
+    results = r.json()
+    for i in xrange(len(results['response']['docs'])):
+        results['response']['docs'][i]['reference_count'] = results['response']['docs'][i]['[citations]']['num_references']
+    return results
 
 def export_abstract(bibcode):
     """
@@ -86,8 +100,18 @@ def export_abstract(bibcode):
             'bibcode': ['{0}'.format(bibcode)],
             'sort': 'date desc, bibcode desc',
             }
-    r = current_app.client.post(EXPORT_SERVICE, json=data, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
-    r.raise_for_status()
+    try:
+        r = current_app.client.post(EXPORT_SERVICE, json=data, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
+    except (ConnectionError, ConnectTimeout, ReadTimeout) as e:
+        msg = str(e)
+        return {"error": "{}".format(msg)}
+    if not r.ok:
+        try:
+            msg = r.json().get('error', {}).get('msg')
+        except:
+            msg = r.content
+        return {"error": "{} (HTTP status code {})".format(msg, r.status_code)}
+    #r.raise_for_status()
     r.cookies.clear_expired_cookies()
     session['cookies'].update(r.cookies.get_dict())
     return r.json()
@@ -117,8 +141,15 @@ def objects_query(object_names):
     data = {
                 'query': ["object:({})".format(",".join(object_names))],
             }
-    r = current_app.client.post(OBJECTS_SERVICE, json=data, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
-    r.raise_for_status()
+    try:
+        r = current_app.client.post(OBJECTS_SERVICE, json=data, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
+    except (ConnectionError, ConnectTimeout, ReadTimeout) as e:
+        msg = str(e)
+        return {"error": "{}".format(msg)}
+    if not r.ok:
+        msg = r.content
+        return {"error": "{} (HTTP status code {})".format(msg, r.status_code)}
+    #r.raise_for_status()
     r.cookies.clear_expired_cookies()
     session['cookies'].update(r.cookies.get_dict())
     return r.json()
@@ -149,21 +180,32 @@ def search(q, rows=25, start=0, sort="date desc"):
                     'stats': stats,
                     'stats.field': stats_field
                 })
-    r = current_app.client.get(SEARCH_SERVICE + "?" + params, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
-    r.raise_for_status()
+    try:
+        r = current_app.client.get(SEARCH_SERVICE + "?" + params, headers=headers, cookies=session['cookies'], timeout=API_TIMEOUT, verify=False)
+    except (ConnectionError, ConnectTimeout, ReadTimeout) as e:
+        msg = str(e)
+        return {"error": "{}".format(msg)}
+    if not r.ok:
+        try:
+            msg = r.json().get('error', {}).get('msg')
+        except:
+            msg = r.content
+        return {"error": "{} (HTTP status code {})".format(msg, r.status_code)}
+    #r.raise_for_status()
     r.cookies.clear_expired_cookies()
     session['cookies'].update(r.cookies.get_dict())
-    return r.json()
+    results = r.json()
+    for i in xrange(len(results['response']['docs'])):
+        results['response']['docs'][i]['reference_count'] = results['response']['docs'][i]['[citations]']['num_references']
+    return results
 
 @app.route(SERVER_BASE_URL, methods=['GET'])
 def index():
     form = ModernForm(request.args)
     if len(form.q.data) > 0:
         results = search(form.q.data, rows=form.rows.data, start=form.start.data, sort=form.sort.data)
-        for i in xrange(len(results['response']['docs'])):
-            results['response']['docs'][i]['reference_count'] = results['response']['docs'][i]['[citations]']['num_references']
-        qtime = "{:.3f}s".format(float(results['responseHeader']['QTime']) / 1000)
-        return render_template('search.html', base_url=SERVER_BASE_URL, auth=session['auth'], form=form, results=results['response'], stats=results.get('stats'), qtime=qtime, sort_options=SORT_OPTIONS)
+        qtime = "{:.3f}s".format(float(results.get('responseHeader', {}).get('QTime', 0)) / 1000)
+        return render_template('search.html', base_url=SERVER_BASE_URL, auth=session['auth'], form=form, results=results.get('response'), stats=results.get('stats'), error=results.get('error'), qtime=qtime, sort_options=SORT_OPTIONS)
     return render_template('modern-form.html', base_url=SERVER_BASE_URL, auth=session['auth'], form=form)
 
 @app.route(SERVER_BASE_URL+'classic-form', methods=['GET'])
@@ -255,20 +297,29 @@ def paper_form_bibcodes():
     return render_template('paper-form.html', base_url=SERVER_BASE_URL, auth=session['auth'], form=form)
 
 
-@app.route(SERVER_BASE_URL+'abs/<bibcode>/abstract', methods=['GET'])
-@app.route(SERVER_BASE_URL+'abs/<bibcode>', methods=['GET'])
-def abs(bibcode):
-    if len(bibcode) == 19:
-        results = abstract(bibcode)
-        results['response']['docs'][0]['reference_count'] = results['response']['docs'][0]['[citations]']['num_references']
-        return render_template('abstract.html', base_url=SERVER_BASE_URL, auth=session['auth'], doc=results['response']['docs'][0])
-    return redirect(url_for('index'))
+@app.route(SERVER_BASE_URL+'abs/<identifier>/abstract', methods=['GET'])
+@app.route(SERVER_BASE_URL+'abs/<identifier>', methods=['GET'])
+def abs(identifier):
+    results = abstract(identifier)
+    docs = results.get('response', {}).get('docs', [])
+    if len(docs) > 0:
+        doc = docs[0]
+    else:
+        doc= None
+        results['error'] = "Record not found"
+    return render_template('abstract.html', base_url=SERVER_BASE_URL, auth=session['auth'], doc=doc, error=results.get('error'))
 
-@app.route(SERVER_BASE_URL+'abs/<bibcode>/export', methods=['GET'])
-def export(bibcode):
-    if len(bibcode) == 19:
-        results = abstract(bibcode)
-        results['response']['docs'][0]['reference_count'] = results['response']['docs'][0]['[citations]']['num_references']
-        data = export_abstract(bibcode)
-        return render_template('export.html', base_url=SERVER_BASE_URL, auth=session['auth'], data=data['export'], doc=results['response']['docs'][0])
-    return redirect(url_for('index'))
+@app.route(SERVER_BASE_URL+'abs/<identifier>/exportcitation', methods=['GET'])
+def export(identifier):
+    results = abstract(identifier)
+    docs = results.get('response', {}).get('docs', [])
+    if len(docs) > 0:
+        doc = docs[0]
+    else:
+        doc= None
+        results['error'] = "Record not found."
+    if 'error' not in results and doc:
+        data = export_abstract(doc.get('bibcode')).get('export')
+    else:
+        data = None
+    return render_template('export.html', base_url=SERVER_BASE_URL, auth=session['auth'], data=data, doc=doc, error=results.get('error'))
