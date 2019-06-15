@@ -255,6 +255,8 @@
             
             <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
             {{ form.q(size=64, class="form-control q ui-autocomplete-input", autocomplete="off") }}
+            {{ form.sort(hidden=true) }}
+            {{ form.rows(hidden=true) }}
             <span class="input-group-btn">
                        <button type="submit" class="btn btn-primary search-submit s-search-submit" style="transition: none;" aria-label="submit">
                            <i class="fa fa-search"></i></button>
