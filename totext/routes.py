@@ -53,9 +53,9 @@ def classic_form():
     if form.author_names.data:
         authors = form.author_names.data.split()
         if form.author_logic.data == "OR":
-            query.append(" OR ".join(["author:({})".format(a) for a in authors]))
+            query.append("author:({})".format(" OR ".join(["\"{}\"".format(a) for a in authors])))
         elif form.author_logic.data == "AND":
-            query.append(" ".join(["author:({})".format(a) for a in authors]))
+            query.append("author:({})".format(" ".join(["\"{}\"".format(a) for a in authors])))
         else:
             query.append("author:({})".format(" ".join(authors)))
     if form.object_names.data:
