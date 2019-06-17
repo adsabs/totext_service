@@ -29,14 +29,16 @@
 
     {% if doc %}
     <a href="{{ url_for('index', q='citations(bibcode:'+doc.bibcode+')') }}" aria-disabled="true" data-widget-id="ShowCitations">
-    {% if doc.citation_count > 0 %}
+    {% if doc.citation_count and doc.citation_count > 0 %}
     <div class="abstract-nav s-nav ">
     {% else %}
     <div class="abstract-nav s-nav   s-nav-inactive ">
     {% endif %}
             <span class="s-content">
             Citations 
+            {% if doc.citation_count and doc.citation_count > 0 %}
             <span class="num-items">({{ doc.citation_count }})</span>
+            {% endif %}
             </span>
     </div>
     </a>
@@ -60,8 +62,8 @@
 
 
     {% if doc %}
+    {% if doc.read_count and doc.read_count > 0 %}
     <a href="{{ url_for('index', q='trending(bibcode:'+doc.bibcode+')') }}" aria-disabled="true" data-widget-id="ShowCoreads">
-    {% if doc.read_count > 0 %}
     <div class="abstract-nav s-nav ">
     {% else %}
     <div class="abstract-nav s-nav   s-nav-inactive ">
@@ -271,13 +273,13 @@ arXiv</div>
 </div>
 {% endif %}
 </div>
+</div>
 
 {% else %}
   <h3 class="s-right-col-widget-title">No Sources Found</h3>
     <div class="resources__container"></div>
 {% endif %}
 
-</div>
 
 
 
